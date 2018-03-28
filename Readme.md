@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Никита Гревцов](https://up.htmlacademy.ru/javascript/13/user/91998).
-* Наставник: `Неизвестно`.
+* Наставник: [Антон Сутармин](https://htmlacademy.ru/profile/id87644).
 
 ---
 
