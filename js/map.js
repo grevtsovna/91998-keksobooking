@@ -95,10 +95,40 @@ var generateObjects = function (quanity, data) {
     offer.photos = shuffleArray(data.photos);
   }
 
+  console.log(objects);
   return objects;
 };
+
+var renderMapPin = function (object) {
+  var mapPinElement = mapPinTemplate.cloneNode(true);
+  var mapPinImageElement = mapPinElement.querySelector('img');
+  var coordX = object.location.x - MAP_PIN_WIDTH / 2;
+  var coordY = object.location.y - MAP_PIN_HEIGHT;
+  mapPinElement.style.left = coordX + 'px';
+  mapPinElement.style.top = coordY + 'px';
+  mapPinImageElement.src = object.author.avatar;
+  mapPinImageElement.alt = object.offer.title;
+
+  return mapPinElement;
+};
+
+var MAP_PIN_WIDTH = 50;
+var MAP_PIN_HEIGHT = 70;
 
 var objects = generateObjects(8, generateData());
 
 var mapEl = document.querySelector('.map');
 mapEl.classList.remove('map--faded');
+
+var mapPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
+var fragment = document.createDocumentFragment();
+
+for (var i = 0; i < objects.length; i++) {
+  var mapPin = renderMapPin(objects[i]);
+  // mapPin.appendChild(fragment);
+  fragment.appendChild(mapPin);
+}
+
+var mapPinsElement = document.querySelector('.map__pins');
+// fragment.appendChild(mapPinsElement);
+mapPinsElement.appendChild(fragment);
