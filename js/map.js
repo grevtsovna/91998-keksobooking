@@ -100,3 +100,5 @@ var generateObjects = function (quanity, data) {
 
 var objects = generateObjects(8, generateData());
 
+var mapEl = document.querySelector('.map');
+mapEl.classList.remove('map--faded');
