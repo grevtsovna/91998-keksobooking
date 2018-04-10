@@ -168,7 +168,7 @@ var renderMapCard = function (object, templateElement) {
 
     var photo = document.createElement('img');
     photo.src = offer.photos[i];
-    photo.alt = offer.photos[i] = 'Фотография жилья';
+    photo.alt = 'Фотография жилья';
     photo.width = 45;
     photo.height = 40;
     photo.classList.add('popup__photo');
