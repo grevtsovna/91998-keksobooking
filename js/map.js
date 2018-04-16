@@ -187,16 +187,42 @@ var showMapTestData = function () {
   var mapPinsElement = document.querySelector('.map__pins');
   var mapCard = renderMapCard(objects[0], templateElement);
 
-  // mapEl.classList.remove('map--faded');
+  mapEl.classList.remove('map--faded');
 
   for (var i = 0; i < objects.length; i++) {
     var mapPin = renderMapPin(objects[i], templateElement);
     fragment.appendChild(mapPin);
   }
 
-  // mapPinsElement.appendChild(fragment);
-  // document.querySelector('.map__filters-container').insertAdjacentElement('beforebegin', mapCard);
+  mapPinsElement.appendChild(fragment);
+  document.querySelector('.map__filters-container').insertAdjacentElement('beforebegin', mapCard);
 };
 
-showMapTestData();
+var disableFormFieldsets = function () {
+  for (var i = 0; i < fieldsets.length; i++) {
+    fieldsets[i].setAttribute('disabled', 'disabled');
+  }
+};
+
+var mainForm = document.querySelector('.ad-form');
+var fieldsets = mainForm.querySelectorAll('fieldset');
+var draggablePin = document.querySelector('.map__pin--main');
+
+var onDraggablePinClick = function (evt) {
+  showMapTestData();
+  activateForm();
+  evt.currentTarget.removeEventListener('mouseup', onDraggablePinClick);
+};
+
+var activateForm = function () {
+  mainForm.classList.remove('ad-form--disabled');
+  for (var i = 0; i < fieldsets.length; i++) {
+    fieldsets[i].removeAttribute('disabled');
+  }
+};
+
+disableFormFieldsets();
+draggablePin.addEventListener('mouseup', onDraggablePinClick);
+
+// showMapTestData();
 
