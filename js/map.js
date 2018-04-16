@@ -187,15 +187,15 @@ var showMapTestData = function () {
   var mapPinsElement = document.querySelector('.map__pins');
   var mapCard = renderMapCard(objects[0], templateElement);
 
-  mapEl.classList.remove('map--faded');
+  // mapEl.classList.remove('map--faded');
 
   for (var i = 0; i < objects.length; i++) {
     var mapPin = renderMapPin(objects[i], templateElement);
     fragment.appendChild(mapPin);
   }
 
-  mapPinsElement.appendChild(fragment);
-  document.querySelector('.map__filters-container').insertAdjacentElement('beforebegin', mapCard);
+  // mapPinsElement.appendChild(fragment);
+  // document.querySelector('.map__filters-container').insertAdjacentElement('beforebegin', mapCard);
 };
 
 showMapTestData();
