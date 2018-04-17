@@ -4,6 +4,9 @@ var MAP_PIN_WIDTH = 50;
 var MAP_PIN_HEIGHT = 70;
 var MAP_MAIN_PIN_SIZE = 65;
 var MAP_MAIN_PIN_ACTIVE_HEIGHT = 87;
+var MAIN_FORM = document.querySelector('.ad-form');
+var FIELDSETS = MAIN_FORM.querySelectorAll('fieldset');
+var DRAGGABLE_PIN = document.querySelector('.map__pin--main');
 
 // Функция, генерирующая объект с данными
 var generateData = function () {
@@ -122,6 +125,10 @@ var renderMapPin = function (object, templateElement) {
   return mapPinElement;
 };
 
+var onPopupCloseClick = function () {
+  document.querySelector('.map__card.popup').remove();
+};
+
 var renderMapCard = function (object, templateElement) {
   var mapCardElement = templateElement.content.querySelector('.map__card').cloneNode(true);
   var offer = object.offer;
@@ -178,14 +185,20 @@ var renderMapCard = function (object, templateElement) {
     mapCardElement.querySelector('.popup__photos').appendChild(photo);
   }
 
+  mapCardElement.querySelector('.popup__close').addEventListener('click', onPopupCloseClick);
+
   return mapCardElement;
 };
 
 var objects = generateObjects(8, generateData());
 var templateElement = document.querySelector('template');
+
 var onMapPinClick = function (evt) {
-  var objectId = parseInt(evt.currentTarget.id);
-  console.log(objectId);
+  var openedPopup = document.querySelector('.map__card.popup');
+  if (document.body.contains(openedPopup)) {
+    openedPopup.remove();
+  }
+  var objectId = parseInt(evt.currentTarget.id, 10);
   var mapCard = renderMapCard(objects[objectId], templateElement);
   document.querySelector('.map__filters-container').insertAdjacentElement('beforebegin', mapCard);
 };
@@ -194,7 +207,6 @@ var showMapTestData = function () {
   var mapEl = document.querySelector('.map');
   var fragment = document.createDocumentFragment();
   var mapPinsElement = document.querySelector('.map__pins');
-  // var mapCard = renderMapCard(objects[0], templateElement);
 
   mapEl.classList.remove('map--faded');
 
@@ -206,19 +218,24 @@ var showMapTestData = function () {
   }
 
   mapPinsElement.appendChild(fragment);
-  // document.querySelector('.map__filters-container').insertAdjacentElement('beforebegin', mapCard);
 };
 
+// Функция, деактивирующая поля формы
 var disableFormFieldsets = function () {
-  for (var i = 0; i < fieldsets.length; i++) {
-    fieldsets[i].setAttribute('disabled', 'disabled');
+  for (var i = 0; i < FIELDSETS.length; i++) {
+    FIELDSETS[i].setAttribute('disabled', 'disabled');
   }
 };
 
-var mainForm = document.querySelector('.ad-form');
-var fieldsets = mainForm.querySelectorAll('fieldset');
-var draggablePin = document.querySelector('.map__pin--main');
+// Функция, активирующая форму
+var activateForm = function () {
+  MAIN_FORM.classList.remove('ad-form--disabled');
+  for (var i = 0; i < FIELDSETS.length; i++) {
+    FIELDSETS[i].removeAttribute('disabled');
+  }
+};
 
+// Обработчик клика по перетаскиваемому пину
 var onDraggablePinClick = function (evt) {
   showMapTestData();
   activateForm();
@@ -226,17 +243,12 @@ var onDraggablePinClick = function (evt) {
   evt.currentTarget.removeEventListener('mouseup', onDraggablePinClick);
 };
 
-var activateForm = function () {
-  mainForm.classList.remove('ad-form--disabled');
-  for (var i = 0; i < fieldsets.length; i++) {
-    fieldsets[i].removeAttribute('disabled');
-  }
-};
-
+// Функция, записывающая координаты метки в поле адреса
 var setAddress = function () {
   var mainPin = document.querySelector('.map__pin--main');
   var offsetX = MAP_MAIN_PIN_SIZE / 2;
   var offsetY;
+
   if (document.querySelector('.map').classList.contains('map--faded')) {
     offsetY = MAP_MAIN_PIN_SIZE / 2;
   } else {
@@ -248,9 +260,10 @@ var setAddress = function () {
   document.querySelector('#address').value = coordX + ', ' + coordY;
 };
 
-disableFormFieldsets();
-draggablePin.addEventListener('mouseup', onDraggablePinClick);
-setAddress();
+var pageOperations = function () {
+  disableFormFieldsets();
+  DRAGGABLE_PIN.addEventListener('mouseup', onDraggablePinClick);
+  setAddress();
+};
 
-// showMapTestData();
-
+pageOperations();
