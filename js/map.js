@@ -2,6 +2,8 @@
 
 var MAP_PIN_WIDTH = 50;
 var MAP_PIN_HEIGHT = 70;
+var MAP_MAIN_PIN_SIZE = 65;
+var MAP_MAIN_PIN_ACTIVE_HEIGHT = 87;
 
 // Функция, генерирующая объект с данными
 var generateData = function () {
@@ -179,23 +181,32 @@ var renderMapCard = function (object, templateElement) {
   return mapCardElement;
 };
 
+var objects = generateObjects(8, generateData());
+var templateElement = document.querySelector('template');
+var onMapPinClick = function (evt) {
+  var objectId = parseInt(evt.currentTarget.id);
+  console.log(objectId);
+  var mapCard = renderMapCard(objects[objectId], templateElement);
+  document.querySelector('.map__filters-container').insertAdjacentElement('beforebegin', mapCard);
+};
+
 var showMapTestData = function () {
-  var objects = generateObjects(8, generateData());
   var mapEl = document.querySelector('.map');
-  var templateElement = document.querySelector('template');
   var fragment = document.createDocumentFragment();
   var mapPinsElement = document.querySelector('.map__pins');
-  var mapCard = renderMapCard(objects[0], templateElement);
+  // var mapCard = renderMapCard(objects[0], templateElement);
 
   mapEl.classList.remove('map--faded');
 
   for (var i = 0; i < objects.length; i++) {
     var mapPin = renderMapPin(objects[i], templateElement);
+    mapPin.id = i;
+    mapPin.addEventListener('click', onMapPinClick);
     fragment.appendChild(mapPin);
   }
 
   mapPinsElement.appendChild(fragment);
-  document.querySelector('.map__filters-container').insertAdjacentElement('beforebegin', mapCard);
+  // document.querySelector('.map__filters-container').insertAdjacentElement('beforebegin', mapCard);
 };
 
 var disableFormFieldsets = function () {
@@ -211,6 +222,7 @@ var draggablePin = document.querySelector('.map__pin--main');
 var onDraggablePinClick = function (evt) {
   showMapTestData();
   activateForm();
+  setAddress();
   evt.currentTarget.removeEventListener('mouseup', onDraggablePinClick);
 };
 
@@ -221,8 +233,24 @@ var activateForm = function () {
   }
 };
 
+var setAddress = function () {
+  var mainPin = document.querySelector('.map__pin--main');
+  var offsetX = MAP_MAIN_PIN_SIZE / 2;
+  var offsetY;
+  if (document.querySelector('.map').classList.contains('map--faded')) {
+    offsetY = MAP_MAIN_PIN_SIZE / 2;
+  } else {
+    offsetY = MAP_MAIN_PIN_ACTIVE_HEIGHT;
+  }
+  var coordX = parseFloat(mainPin.style.left) + offsetX;
+  var coordY = parseFloat(mainPin.style.top) + offsetY;
+
+  document.querySelector('#address').value = coordX + ', ' + coordY;
+};
+
 disableFormFieldsets();
 draggablePin.addEventListener('mouseup', onDraggablePinClick);
+setAddress();
 
 // showMapTestData();
 
