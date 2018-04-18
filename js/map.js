@@ -193,14 +193,15 @@ var renderMapCard = function (object, templateElement) {
 var objects = generateObjects(8, generateData());
 var templateElement = document.querySelector('template');
 
-var onMapPinClick = function (evt) {
-  var openedPopup = document.querySelector('.map__card.popup');
-  if (document.body.contains(openedPopup)) {
-    openedPopup.remove();
-  }
-  var objectId = parseInt(evt.currentTarget.id, 10);
-  var mapCard = renderMapCard(objects[objectId], templateElement);
-  document.querySelector('.map__filters-container').insertAdjacentElement('beforebegin', mapCard);
+var onMapPinClick = function (object) {
+  return function () {
+    var openedPopup = document.querySelector('.map__card.popup');
+    if (document.body.contains(openedPopup)) {
+      openedPopup.remove();
+    }
+    var mapCard = renderMapCard(object, templateElement);
+    document.querySelector('.map__filters-container').insertAdjacentElement('beforebegin', mapCard);
+  };
 };
 
 var showMapTestData = function () {
@@ -213,7 +214,7 @@ var showMapTestData = function () {
   for (var i = 0; i < objects.length; i++) {
     var mapPin = renderMapPin(objects[i], templateElement);
     mapPin.id = i;
-    mapPin.addEventListener('click', onMapPinClick);
+    mapPin.addEventListener('click', onMapPinClick(objects[i]));
     fragment.appendChild(mapPin);
   }
 
