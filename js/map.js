@@ -4,9 +4,9 @@ var MAP_PIN_WIDTH = 50;
 var MAP_PIN_HEIGHT = 70;
 var MAP_MAIN_PIN_SIZE = 65;
 var MAP_MAIN_PIN_ACTIVE_HEIGHT = 87;
-var MAIN_FORM = document.querySelector('.ad-form');
-var FIELDSETS = MAIN_FORM.querySelectorAll('fieldset');
-var DRAGGABLE_PIN = document.querySelector('.map__pin--main');
+var mainForm = document.querySelector('.ad-form');
+var fieldsets = mainForm.querySelectorAll('fieldset');
+var draggablePin = document.querySelector('.map__pin--main');
 
 // Функция, генерирующая объект с данными
 var generateData = function () {
@@ -223,16 +223,16 @@ var showMapTestData = function () {
 
 // Функция, деактивирующая поля формы
 var disableFormFieldsets = function () {
-  for (var i = 0; i < FIELDSETS.length; i++) {
-    FIELDSETS[i].setAttribute('disabled', 'disabled');
+  for (var i = 0; i < fieldsets.length; i++) {
+    fieldsets[i].setAttribute('disabled', 'disabled');
   }
 };
 
 // Функция, активирующая форму
 var activateForm = function () {
-  MAIN_FORM.classList.remove('ad-form--disabled');
-  for (var i = 0; i < FIELDSETS.length; i++) {
-    FIELDSETS[i].removeAttribute('disabled');
+  mainForm.classList.remove('ad-form--disabled');
+  for (var i = 0; i < fieldsets.length; i++) {
+    fieldsets[i].removeAttribute('disabled');
   }
 };
 
@@ -263,7 +263,7 @@ var setAddress = function () {
 
 var pageOperations = function () {
   disableFormFieldsets();
-  DRAGGABLE_PIN.addEventListener('mouseup', onDraggablePinClick);
+  draggablePin.addEventListener('mouseup', onDraggablePinClick);
   setAddress();
 };
 
