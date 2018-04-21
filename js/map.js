@@ -2,6 +2,12 @@
 
 var MAP_PIN_WIDTH = 50;
 var MAP_PIN_HEIGHT = 70;
+var MAP_MAIN_PIN_SIZE = 65;
+var MAP_MAIN_PIN_ACTIVE_HEIGHT = 87;
+var mainForm = document.querySelector('.ad-form');
+var fieldsets = mainForm.querySelectorAll('fieldset');
+var draggablePin = document.querySelector('.map__pin--main');
+var templateElement = document.querySelector('template');
 
 // Функция, генерирующая объект с данными
 var generateData = function () {
@@ -105,7 +111,7 @@ var generateObjects = function (quanity, data) {
   return objects;
 };
 
-var renderMapPin = function (object, templateElement) {
+var renderMapPin = function (object) {
   var mapPinTemplate = templateElement.content.querySelector('.map__pin');
   var mapPinElement = mapPinTemplate.cloneNode(true);
   var mapPinImageElement = mapPinElement.querySelector('img');
@@ -120,7 +126,11 @@ var renderMapPin = function (object, templateElement) {
   return mapPinElement;
 };
 
-var renderMapCard = function (object, templateElement) {
+var onPopupCloseClick = function () {
+  document.querySelector('.map__card.popup').remove();
+};
+
+var renderMapCard = function (object) {
   var mapCardElement = templateElement.content.querySelector('.map__card').cloneNode(true);
   var offer = object.offer;
   var type;
@@ -176,27 +186,84 @@ var renderMapCard = function (object, templateElement) {
     mapCardElement.querySelector('.popup__photos').appendChild(photo);
   }
 
+  mapCardElement.querySelector('.popup__close').addEventListener('click', onPopupCloseClick);
+
   return mapCardElement;
 };
 
-var showMapTestData = function () {
-  var objects = generateObjects(8, generateData());
+var onMapPinClick = function (object) {
+  return function () {
+    var openedPopup = document.querySelector('.map__card.popup');
+    if (document.body.contains(openedPopup)) {
+      openedPopup.remove();
+    }
+    var mapCard = renderMapCard(object);
+    document.querySelector('.map__filters-container').insertAdjacentElement('beforebegin', mapCard);
+  };
+};
+
+var showMapData = function (objects) {
   var mapEl = document.querySelector('.map');
-  var templateElement = document.querySelector('template');
   var fragment = document.createDocumentFragment();
   var mapPinsElement = document.querySelector('.map__pins');
-  var mapCard = renderMapCard(objects[0], templateElement);
 
   mapEl.classList.remove('map--faded');
 
   for (var i = 0; i < objects.length; i++) {
-    var mapPin = renderMapPin(objects[i], templateElement);
+    var mapPin = renderMapPin(objects[i]);
+    mapPin.id = i;
+    mapPin.addEventListener('click', onMapPinClick(objects[i]));
     fragment.appendChild(mapPin);
   }
 
   mapPinsElement.appendChild(fragment);
-  document.querySelector('.map__filters-container').insertAdjacentElement('beforebegin', mapCard);
 };
 
-showMapTestData();
+// Функция, деактивирующая поля формы
+var disableFormFieldsets = function () {
+  for (var i = 0; i < fieldsets.length; i++) {
+    fieldsets[i].setAttribute('disabled', 'disabled');
+  }
+};
 
+// Функция, активирующая форму
+var activateForm = function () {
+  mainForm.classList.remove('ad-form--disabled');
+  for (var i = 0; i < fieldsets.length; i++) {
+    fieldsets[i].removeAttribute('disabled');
+  }
+};
+
+// Обработчик клика по перетаскиваемому пину
+var onDraggablePinClick = function (evt) {
+  var objects = generateObjects(8, generateData());
+  showMapData(objects);
+  activateForm();
+  setAddress();
+  evt.currentTarget.removeEventListener('mouseup', onDraggablePinClick);
+};
+
+// Функция, записывающая координаты метки в поле адреса
+var setAddress = function () {
+  var mainPin = document.querySelector('.map__pin--main');
+  var offsetX = MAP_MAIN_PIN_SIZE / 2;
+  var offsetY;
+
+  if (document.querySelector('.map').classList.contains('map--faded')) {
+    offsetY = MAP_MAIN_PIN_SIZE / 2;
+  } else {
+    offsetY = MAP_MAIN_PIN_ACTIVE_HEIGHT;
+  }
+  var coordX = parseFloat(mainPin.style.left) + offsetX;
+  var coordY = parseFloat(mainPin.style.top) + offsetY;
+
+  document.querySelector('#address').value = coordX + ', ' + coordY;
+};
+
+var pageOperations = function () {
+  disableFormFieldsets();
+  draggablePin.addEventListener('mouseup', onDraggablePinClick);
+  setAddress();
+};
+
+pageOperations();
