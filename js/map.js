@@ -7,6 +7,7 @@ var MAP_MAIN_PIN_ACTIVE_HEIGHT = 87;
 var mainForm = document.querySelector('.ad-form');
 var fieldsets = mainForm.querySelectorAll('fieldset');
 var draggablePin = document.querySelector('.map__pin--main');
+var templateElement = document.querySelector('template');
 
 // Функция, генерирующая объект с данными
 var generateData = function () {
@@ -190,9 +191,6 @@ var renderMapCard = function (object, templateElement) {
   return mapCardElement;
 };
 
-var objects = generateObjects(8, generateData());
-var templateElement = document.querySelector('template');
-
 var onMapPinClick = function (object) {
   return function () {
     var openedPopup = document.querySelector('.map__card.popup');
@@ -204,7 +202,7 @@ var onMapPinClick = function (object) {
   };
 };
 
-var showMapTestData = function () {
+var showMapData = function (objects) {
   var mapEl = document.querySelector('.map');
   var fragment = document.createDocumentFragment();
   var mapPinsElement = document.querySelector('.map__pins');
@@ -238,7 +236,8 @@ var activateForm = function () {
 
 // Обработчик клика по перетаскиваемому пину
 var onDraggablePinClick = function (evt) {
-  showMapTestData();
+  var objects = generateObjects(8, generateData());
+  showMapData(objects);
   activateForm();
   setAddress();
   evt.currentTarget.removeEventListener('mouseup', onDraggablePinClick);
