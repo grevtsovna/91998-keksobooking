@@ -111,7 +111,7 @@ var generateObjects = function (quanity, data) {
   return objects;
 };
 
-var renderMapPin = function (object, templateElement) {
+var renderMapPin = function (object) {
   var mapPinTemplate = templateElement.content.querySelector('.map__pin');
   var mapPinElement = mapPinTemplate.cloneNode(true);
   var mapPinImageElement = mapPinElement.querySelector('img');
@@ -130,7 +130,7 @@ var onPopupCloseClick = function () {
   document.querySelector('.map__card.popup').remove();
 };
 
-var renderMapCard = function (object, templateElement) {
+var renderMapCard = function (object) {
   var mapCardElement = templateElement.content.querySelector('.map__card').cloneNode(true);
   var offer = object.offer;
   var type;
@@ -197,7 +197,7 @@ var onMapPinClick = function (object) {
     if (document.body.contains(openedPopup)) {
       openedPopup.remove();
     }
-    var mapCard = renderMapCard(object, templateElement);
+    var mapCard = renderMapCard(object);
     document.querySelector('.map__filters-container').insertAdjacentElement('beforebegin', mapCard);
   };
 };
@@ -210,7 +210,7 @@ var showMapData = function (objects) {
   mapEl.classList.remove('map--faded');
 
   for (var i = 0; i < objects.length; i++) {
-    var mapPin = renderMapPin(objects[i], templateElement);
+    var mapPin = renderMapPin(objects[i]);
     mapPin.id = i;
     mapPin.addEventListener('click', onMapPinClick(objects[i]));
     fragment.appendChild(mapPin);
