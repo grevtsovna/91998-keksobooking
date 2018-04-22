@@ -267,3 +267,38 @@ var pageOperations = function () {
 };
 
 pageOperations();
+
+var onRoomTypeChange = function (evt) {
+  var priceInput = mainForm.querySelector('#price');
+
+  switch (evt.target.value) {
+    case 'bungalo':
+      priceInput.min = '0';
+      priceInput.placeholder = '0';
+      break;
+    case 'flat':
+      priceInput.min = '1000';
+      priceInput.placeholder = '1 000';
+      break;
+    case 'house':
+      priceInput.min = '5000';
+      priceInput.placeholder = '5 000';
+      break;
+    case 'palace':
+      priceInput.min = '10000';
+      priceInput.placeholder = '10 000';
+  }
+};
+
+var onTimeInputsChange = function (evt) {
+  if (evt.currentTarget.id === 'timein') {
+    mainForm.querySelector('#timeout').value = evt.currentTarget.value;
+  } else {
+    mainForm.querySelector('#timein').value = evt.currentTarget.value;
+  }
+};
+
+mainForm.querySelector('#timein').addEventListener('change', onTimeInputsChange);
+mainForm.querySelector('#timeout').addEventListener('change', onTimeInputsChange);
+
+mainForm.querySelector('#type').addEventListener('change', onRoomTypeChange);
