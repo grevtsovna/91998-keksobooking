@@ -4,6 +4,7 @@ var MAP_PIN_WIDTH = 50;
 var MAP_PIN_HEIGHT = 70;
 var MAP_MAIN_PIN_SIZE = 65;
 var MAP_MAIN_PIN_ACTIVE_HEIGHT = 87;
+var PALACE_ROOM_NUMBER = 100;
 var mainForm = document.querySelector('.ad-form');
 var fieldsets = mainForm.querySelectorAll('fieldset');
 var draggablePin = document.querySelector('.map__pin--main');
@@ -266,8 +267,6 @@ var pageOperations = function () {
   setAddress();
 };
 
-pageOperations();
-
 var onRoomTypeChange = function (evt) {
   var priceInput = mainForm.querySelector('#price');
 
@@ -298,7 +297,54 @@ var onTimeInputsChange = function (evt) {
   }
 };
 
-mainForm.querySelector('#timein').addEventListener('change', onTimeInputsChange);
-mainForm.querySelector('#timeout').addEventListener('change', onTimeInputsChange);
+var validateRoomNumber = function () {
+  var capacityEl = mainForm.querySelector('#capacity');
+  var roomNumberEl = mainForm.querySelector('#room_number');
+  var capacityValue = parseInt(capacityEl.value, 10);
+  var roomNumberValue = parseInt(roomNumberEl.value, 10);
 
-mainForm.querySelector('#type').addEventListener('change', onRoomTypeChange);
+  if (capacityValue > roomNumberValue) {
+    capacityEl.setCustomValidity('Количество гостей не может быть больше количества комнат');
+  } else if (capacityValue === 0 && roomNumberValue !== PALACE_ROOM_NUMBER) {
+    capacityEl.setCustomValidity('Этот вариант подходит только для тех помещений, в которых 100 комнат');
+  } else {
+    capacityEl.setCustomValidity('');
+  }
+};
+
+var checkAllInputs = function () {
+  var mainFormInputs = mainForm.querySelectorAll('input, select');
+  for (var i = 0; i < mainFormInputs.length; i++) {
+    if (mainFormInputs[i].validity.valid) {
+      mainFormInputs[i].style.border = '';
+    } else {
+      mainFormInputs[i].style.border = '1px solid red';
+    }
+  }
+};
+
+var validateForm = function () {
+  validateRoomNumber();
+  checkAllInputs();
+};
+
+var onSubmitButtonClick = function () {
+  validateForm();
+};
+
+var mainFormOperations = function () {
+  var submitForm = mainForm.querySelector('.ad-form__submit');
+
+  submitForm.addEventListener('click', onSubmitButtonClick);
+
+  mainForm.querySelector('#room_number').addEventListener('change', validateRoomNumber);
+  mainForm.querySelector('#capacity').addEventListener('change', validateRoomNumber);
+
+  mainForm.querySelector('#timein').addEventListener('change', onTimeInputsChange);
+  mainForm.querySelector('#timeout').addEventListener('change', onTimeInputsChange);
+
+  mainForm.querySelector('#type').addEventListener('change', onRoomTypeChange);
+};
+
+pageOperations();
+mainFormOperations();
