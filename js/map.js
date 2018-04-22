@@ -328,22 +328,60 @@ var validateForm = function () {
   checkAllInputs();
 };
 
+var clearValidationStyle = function () {
+  var mainFormInputs = mainForm.querySelectorAll('input, select');
+  for (var i = 0; i < mainFormInputs.length; i++) {
+    mainFormInputs[i].style.border = '';
+  }
+};
+
+var resetPage = function () {
+  var similarObjectsPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+  var mapCard = document.querySelector('.map__card');
+
+  for (var i = 0; i < similarObjectsPins.length; i++) {
+    similarObjectsPins[i].remove();
+  }
+  if (document.contains(mapCard)) {
+    mapCard.remove();
+  }
+  clearValidationStyle();
+  disableFormFieldsets();
+  mainForm.classList.add('ad-form--disabled');
+  for (i = 0; i < fieldsets.length; i++) {
+    fieldsets[i].removeAttribute('disabled');
+  }
+  draggablePin.addEventListener('mouseup', onDraggablePinClick);
+  setAddress();
+};
+
 var onSubmitButtonClick = function () {
   validateForm();
 };
 
+var onRoomNumberChange = function () {
+  validateRoomNumber();
+};
+
+var onCapacityChange = function () {
+  validateRoomNumber();
+};
+
+var onResetPageButtonClick = function () {
+  resetPage();
+};
+
 var mainFormOperations = function () {
   var submitForm = mainForm.querySelector('.ad-form__submit');
+  var resetPageButton = mainForm.querySelector('.ad-form__reset');
 
   submitForm.addEventListener('click', onSubmitButtonClick);
-
-  mainForm.querySelector('#room_number').addEventListener('change', validateRoomNumber);
-  mainForm.querySelector('#capacity').addEventListener('change', validateRoomNumber);
-
+  mainForm.querySelector('#room_number').addEventListener('change', onRoomNumberChange);
+  mainForm.querySelector('#capacity').addEventListener('change', onCapacityChange);
   mainForm.querySelector('#timein').addEventListener('change', onTimeInputsChange);
   mainForm.querySelector('#timeout').addEventListener('change', onTimeInputsChange);
-
   mainForm.querySelector('#type').addEventListener('change', onRoomTypeChange);
+  resetPageButton.addEventListener('click', onResetPageButtonClick);
 };
 
 pageOperations();
