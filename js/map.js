@@ -1,22 +1,24 @@
 'use strict';
 
-(function () {
+window.mapModule = (function () {
   var MAP_PIN_WIDTH = 50;
   var MAP_PIN_HEIGHT = 70;
   var MAP_MAIN_PIN_SIZE = 65;
   var MAP_MAIN_PIN_ACTIVE_HEIGHT = 87;
+  var draggablePin = document.querySelector('.map__pin--main');
   var templateElement = document.querySelector('template');
+  var mapEl = document.querySelector('.map');
 
   // Функция, возвращающая массив объектов со случайными данными
-  var generateObjects = function (quanity, data) {
+  var generateObjects = function (quantity, data) {
     var objects = [];
-    var preparedAvatars = window.util.prepareData(quanity, data.avatars);
-    var preparedTitles = window.util.prepareData(quanity, data.titles);
+    var preparedAvatars = window.util.prepareData(quantity, data.avatars);
+    var preparedTitles = window.util.prepareData(quantity, data.titles);
     var features = [];
     var featuresLength = window.util.getRandomInt(1, data.features.length);
     var prepearedFeatures = window.util.prepareData(featuresLength, data.features);
 
-    for (var i = 0; i < quanity; i++) {
+    for (var i = 0; i < quantity; i++) {
       objects[i] = {};
       var object = objects[i];
 
@@ -143,7 +145,6 @@
   };
 
   var showMapData = function (objects) {
-    var mapEl = document.querySelector('.map');
     var fragment = document.createDocumentFragment();
     var mapPinsElement = document.querySelector('.map__pins');
 
@@ -158,13 +159,14 @@
 
     mapPinsElement.appendChild(fragment);
   };
+
   // Функция, записывающая координаты метки в поле адреса
   var setAddress = function () {
     var mainPin = document.querySelector('.map__pin--main');
     var offsetX = MAP_MAIN_PIN_SIZE / 2;
     var offsetY;
 
-    if (document.querySelector('.map').classList.contains('map--faded')) {
+    if (mapEl.classList.contains('map--faded')) {
       offsetY = MAP_MAIN_PIN_SIZE / 2;
     } else {
       offsetY = MAP_MAIN_PIN_ACTIVE_HEIGHT;
@@ -179,141 +181,18 @@
   var onDraggablePinClick = function (evt) {
     var objects = generateObjects(8, window.util.generateData());
     showMapData(objects);
-    window.util.activateForm();
+    window.formModule.activateForm();
     setAddress();
     evt.currentTarget.removeEventListener('mouseup', onDraggablePinClick);
   };
 
-  window.util.draggablePin.addEventListener('mouseup', onDraggablePinClick);
-  setAddress();
-})();
-
-(function () {
-  var PALACE_ROOM_NUMBER = 100;
-
-  var mainForm = window.util.mainForm;
-  var submitForm = mainForm.querySelector('.ad-form__submit');
-  var resetPageButton = mainForm.querySelector('.ad-form__reset');
-
-  // Функция, деактивирующая поля формы
-  var disableFormFieldsets = function () {
-    for (var i = 0; i < window.util.fieldsets.length; i++) {
-      window.util.fieldsets[i].setAttribute('disabled', 'disabled');
-    }
-  };
-
-  var onRoomTypeChange = function (evt) {
-    var priceInput = mainForm.querySelector('#price');
-
-    switch (evt.target.value) {
-      case 'bungalo':
-        priceInput.min = '0';
-        priceInput.placeholder = '0';
-        break;
-      case 'flat':
-        priceInput.min = '1000';
-        priceInput.placeholder = '1 000';
-        break;
-      case 'house':
-        priceInput.min = '5000';
-        priceInput.placeholder = '5 000';
-        break;
-      case 'palace':
-        priceInput.min = '10000';
-        priceInput.placeholder = '10 000';
-    }
-  };
-
-  var onTimeInputsChange = function (evt) {
-    if (evt.currentTarget.id === 'timein') {
-      mainForm.querySelector('#timeout').value = evt.currentTarget.value;
-    } else {
-      mainForm.querySelector('#timein').value = evt.currentTarget.value;
-    }
-  };
-
-  var validateRoomNumber = function () {
-    var capacityEl = mainForm.querySelector('#capacity');
-    var roomNumberEl = mainForm.querySelector('#room_number');
-    var capacityValue = parseInt(capacityEl.value, 10);
-    var roomNumberValue = parseInt(roomNumberEl.value, 10);
-
-    if (capacityValue > roomNumberValue) {
-      capacityEl.setCustomValidity('Количество гостей не может быть больше количества комнат');
-    } else if (capacityValue === 0 && roomNumberValue !== PALACE_ROOM_NUMBER) {
-      capacityEl.setCustomValidity('Этот вариант подходит только для тех помещений, в которых 100 комнат');
-    } else {
-      capacityEl.setCustomValidity('');
-    }
-  };
-
-  var checkAllInputs = function () {
-    var mainFormInputs = mainForm.querySelectorAll('input, select');
-    for (var i = 0; i < mainFormInputs.length; i++) {
-      if (mainFormInputs[i].validity.valid) {
-        mainFormInputs[i].style.border = '';
-      } else {
-        mainFormInputs[i].style.border = '1px solid red';
-      }
-    }
-  };
-
-  var validateForm = function () {
-    validateRoomNumber();
-    checkAllInputs();
-  };
-
-  var clearValidationStyle = function () {
-    var mainFormInputs = mainForm.querySelectorAll('input, select');
-    for (var i = 0; i < mainFormInputs.length; i++) {
-      mainFormInputs[i].style.border = '';
-    }
-  };
-
-  var resetPage = function () {
-    var similarObjectsPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-    var mapCard = document.querySelector('.map__card');
-
-    for (var i = 0; i < similarObjectsPins.length; i++) {
-      similarObjectsPins[i].remove();
-    }
-    if (document.contains(mapCard)) {
-      mapCard.remove();
-    }
-    clearValidationStyle();
-    disableFormFieldsets();
-    mainForm.classList.add('ad-form--disabled');
-    for (i = 0; i < window.util.fieldsets.length; i++) {
-      window.util.fieldsets[i].removeAttribute('disabled');
-    }
-    window.util.draggablePin.addEventListener('mouseup', onDraggablePinClick);
+  var onResetButtonClick = function () {
+    draggablePin.addEventListener('mouseup', onDraggablePinClick);
+    mapEl.classList.add('map--faded');
     setAddress();
   };
 
-  var onSubmitButtonClick = function () {
-    validateForm();
-  };
-
-  var onRoomNumberChange = function () {
-    validateRoomNumber();
-  };
-
-  var onCapacityChange = function () {
-    validateRoomNumber();
-  };
-
-  var onResetPageButtonClick = function () {
-    resetPage();
-  };
-
-
-  submitForm.addEventListener('click', onSubmitButtonClick);
-  mainForm.querySelector('#room_number').addEventListener('change', onRoomNumberChange);
-  mainForm.querySelector('#capacity').addEventListener('change', onCapacityChange);
-  mainForm.querySelector('#timein').addEventListener('change', onTimeInputsChange);
-  mainForm.querySelector('#timeout').addEventListener('change', onTimeInputsChange);
-  mainForm.querySelector('#type').addEventListener('change', onRoomTypeChange);
-  resetPageButton.addEventListener('click', onResetPageButtonClick);
-
-  disableFormFieldsets();
+  window.formModule.resetPageButton.addEventListener('click', onResetButtonClick);
+  draggablePin.addEventListener('mouseup', onDraggablePinClick);
+  setAddress();
 })();

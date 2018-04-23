@@ -2,10 +2,6 @@
 
 window.util = (function () {
   return {
-    mainForm: document.querySelector('.ad-form'),
-    fieldsets: document.querySelectorAll('.ad-form fieldset'),
-    draggablePin: document.querySelector('.map__pin--main'),
-
     // Функция, генерирующая объект с данными
     generateData: function () {
       var data = {};
@@ -62,14 +58,6 @@ window.util = (function () {
       }
 
       return this.shuffleArray(preparedArr);
-    },
-
-    // Функция, активирующая форму
-    activateForm: function () {
-      this.mainForm.classList.remove('ad-form--disabled');
-      for (var i = 0; i < this.fieldsets.length; i++) {
-        this.fieldsets[i].removeAttribute('disabled');
-      }
     }
   };
 })();
