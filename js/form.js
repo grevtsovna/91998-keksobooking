@@ -94,12 +94,10 @@ window.formModule = (function () {
     if (document.contains(mapCard)) {
       mapCard.remove();
     }
+    window.mapModule.fadeMap();
     clearValidationStyle();
     disableFormFieldsets();
     mainForm.classList.add('ad-form--disabled');
-    for (i = 0; i < fieldsets.length; i++) {
-      fieldsets[i].removeAttribute('disabled');
-    }
   };
 
   var onSubmitButtonClick = function () {
@@ -133,8 +131,6 @@ window.formModule = (function () {
   resetPageButton.addEventListener('click', onResetPageButtonClick);
 
   return {
-    resetPageButton: resetPageButton,
-
     // Функция, активирующая форму
     activateForm: function () {
       mainForm.classList.remove('ad-form--disabled');

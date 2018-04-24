@@ -188,13 +188,16 @@ window.mapModule = (function () {
     evt.currentTarget.removeEventListener('mouseup', onDraggablePinClick);
   };
 
-  var onResetButtonClick = function () {
+  var fadeMap = function () {
     draggablePin.addEventListener('mouseup', onDraggablePinClick);
     mapEl.classList.add('map--faded');
     window.formModule.setAddress(getAddress());
   };
 
-  window.formModule.resetPageButton.addEventListener('click', onResetButtonClick);
   draggablePin.addEventListener('mouseup', onDraggablePinClick);
   window.formModule.setAddress(getAddress());
+
+  return {
+    fadeMap: fadeMap
+  };
 })();
