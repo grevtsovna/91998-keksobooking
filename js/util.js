@@ -46,18 +46,18 @@ window.util = (function () {
     },
 
     // Функция, подготавливающая данные
-    prepareData: function (quanity, array) {
-      var preparedArr = array.slice();
+    getShuffledArrayOfCertainLength: function (quantity, array) {
+      var preparedArr = this.shuffleArray(array.slice());
 
-      if (quanity > preparedArr.length) {
-        var diff = Math.ceil((quanity - preparedArr.length) / preparedArr.length);
+      if (quantity > preparedArr.length) {
+        var diff = Math.ceil((quantity - preparedArr.length) / preparedArr.length);
         var preparedArrCopy = preparedArr.slice();
         for (var i = 0; i < diff; i++) {
           preparedArr = preparedArr.concat(preparedArrCopy);
         }
       }
 
-      return this.shuffleArray(preparedArr);
+      return preparedArr.slice(0, quantity + 1);
     }
   };
 })();

@@ -49,14 +49,15 @@ window.formModule = (function () {
     var roomNumberEl = mainForm.querySelector('#room_number');
     var capacityValue = parseInt(capacityEl.value, 10);
     var roomNumberValue = parseInt(roomNumberEl.value, 10);
+    var validityMessage = '';
 
     if (capacityValue > roomNumberValue) {
-      capacityEl.setCustomValidity('Количество гостей не может быть больше количества комнат');
-    } else if (capacityValue === 0 && roomNumberValue !== PALACE_ROOM_NUMBER) {
-      capacityEl.setCustomValidity('Этот вариант подходит только для тех помещений, в которых 100 комнат');
-    } else {
-      capacityEl.setCustomValidity('');
+      validityMessage = 'Количество гостей не может быть больше количества комнат';
     }
+    if (capacityValue === 0 && roomNumberValue !== PALACE_ROOM_NUMBER) {
+      validityMessage = 'Этот вариант подходит только для тех помещений, в которых 100 комнат';
+    }
+    capacityEl.setCustomValidity(validityMessage);
   };
 
   var checkAllInputs = function () {
@@ -118,6 +119,10 @@ window.formModule = (function () {
     resetPage();
   };
 
+  var setAddress = function (address) {
+    document.querySelector('#address').value = address;
+  };
+
 
   submitForm.addEventListener('click', onSubmitButtonClick);
   mainForm.querySelector('#room_number').addEventListener('change', onRoomNumberChange);
@@ -127,10 +132,7 @@ window.formModule = (function () {
   mainForm.querySelector('#type').addEventListener('change', onRoomTypeChange);
   resetPageButton.addEventListener('click', onResetPageButtonClick);
 
-  // disableFormFieldsets();
-
   return {
-    mainForm: document.querySelector('.ad-form'),
     resetPageButton: resetPageButton,
 
     // Функция, активирующая форму
@@ -139,6 +141,7 @@ window.formModule = (function () {
       for (var i = 0; i < fieldsets.length; i++) {
         fieldsets[i].removeAttribute('disabled');
       }
-    }
+    },
+    setAddress: setAddress
   };
 })();

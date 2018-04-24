@@ -12,15 +12,12 @@ window.mapModule = (function () {
   // Функция, возвращающая массив объектов со случайными данными
   var generateObjects = function (quantity, data) {
     var objects = [];
-    var preparedAvatars = window.util.prepareData(quantity, data.avatars);
-    var preparedTitles = window.util.prepareData(quantity, data.titles);
-    var features = [];
-    var featuresLength = window.util.getRandomInt(1, data.features.length);
-    var prepearedFeatures = window.util.prepareData(featuresLength, data.features);
+    var preparedAvatars = window.util.getShuffledArrayOfCertainLength(quantity, data.avatars);
+    var preparedTitles = window.util.getShuffledArrayOfCertainLength(quantity, data.titles);
 
     for (var i = 0; i < quantity; i++) {
-      objects[i] = {};
-      var object = objects[i];
+      var object = {};
+      var randInt = window.util.getRandomInt(1, data.features.length);
 
       object.author = {};
       object.author.avatar = preparedAvatars[i];
@@ -40,14 +37,12 @@ window.mapModule = (function () {
       offer.guests = window.util.getRandomInt(1, 15);
       offer.checkin = window.util.getRandomArrayElement(data.times);
       offer.checkout = window.util.getRandomArrayElement(data.times);
+      offer.features = window.util.getShuffledArrayOfCertainLength(randInt, data.features);
 
-      for (var j = 0; j < featuresLength; j++) {
-        features[j] = prepearedFeatures[j];
-      }
-
-      offer.features = features;
       offer.description = '';
       offer.photos = window.util.shuffleArray(data.photos);
+
+      objects.push(object);
     }
 
     return objects;
@@ -72,13 +67,10 @@ window.mapModule = (function () {
     document.querySelector('.map__card.popup').remove();
   };
 
-  var renderMapCard = function (object) {
-    var mapCardElement = templateElement.content.querySelector('.map__card').cloneNode(true);
-    var offer = object.offer;
-    var type;
-    var features = mapCardElement.querySelectorAll('.popup__feature');
+  var getOfferType = function (offerType) {
+    var type = '';
 
-    switch (offer.type) {
+    switch (offerType) {
       case 'flat' :
         type = 'Квартира';
         break;
@@ -88,9 +80,21 @@ window.mapModule = (function () {
       case 'house' :
         type = 'Дом';
         break;
+      case 'palace' :
+        type = 'Дворец';
+        break;
       default :
         type = 'Неизвестный тип жилья';
     }
+
+    return type;
+  };
+
+  var renderMapCard = function (object) {
+    var mapCardElement = templateElement.content.querySelector('.map__card').cloneNode(true);
+    var offer = object.offer;
+    var type = getOfferType(offer.type);
+    var features = mapCardElement.querySelectorAll('.popup__feature');
 
     mapCardElement.querySelector('.popup__title').textContent = offer.title;
     mapCardElement.querySelector('.popup__text--address').textContent = offer.address;
@@ -152,7 +156,6 @@ window.mapModule = (function () {
 
     for (var i = 0; i < objects.length; i++) {
       var mapPin = renderMapPin(objects[i]);
-      mapPin.id = i;
       mapPin.addEventListener('click', onMapPinClick(objects[i]));
       fragment.appendChild(mapPin);
     }
@@ -160,8 +163,7 @@ window.mapModule = (function () {
     mapPinsElement.appendChild(fragment);
   };
 
-  // Функция, записывающая координаты метки в поле адреса
-  var setAddress = function () {
+  var getAddress = function () {
     var mainPin = document.querySelector('.map__pin--main');
     var offsetX = MAP_MAIN_PIN_SIZE / 2;
     var offsetY;
@@ -174,7 +176,7 @@ window.mapModule = (function () {
     var coordX = parseFloat(mainPin.style.left) + offsetX;
     var coordY = parseFloat(mainPin.style.top) + offsetY;
 
-    document.querySelector('#address').value = coordX + ', ' + coordY;
+    return coordX + ', ' + coordY;
   };
 
   // Обработчик клика по перетаскиваемому пину
@@ -182,17 +184,17 @@ window.mapModule = (function () {
     var objects = generateObjects(8, window.util.generateData());
     showMapData(objects);
     window.formModule.activateForm();
-    setAddress();
+    window.formModule.setAddress(getAddress());
     evt.currentTarget.removeEventListener('mouseup', onDraggablePinClick);
   };
 
   var onResetButtonClick = function () {
     draggablePin.addEventListener('mouseup', onDraggablePinClick);
     mapEl.classList.add('map--faded');
-    setAddress();
+    window.formModule.setAddress(getAddress());
   };
 
   window.formModule.resetPageButton.addEventListener('click', onResetButtonClick);
   draggablePin.addEventListener('mouseup', onDraggablePinClick);
-  setAddress();
+  window.formModule.setAddress(getAddress());
 })();
