@@ -37,11 +37,8 @@ window.formModule = (function () {
   };
 
   var onTimeInputsChange = function (evt) {
-    if (evt.currentTarget.id === 'timein') {
-      mainForm.querySelector('#timeout').value = evt.currentTarget.value;
-    } else {
-      mainForm.querySelector('#timein').value = evt.currentTarget.value;
-    }
+    var selector = (evt.currentTarget.id === 'timein') ? '#timeout' : '#timein';
+    mainForm.querySelector(selector).value = evt.currentTarget.value;
   };
 
   var validateRoomNumber = function () {
@@ -122,6 +119,7 @@ window.formModule = (function () {
   };
 
 
+  disableFormFieldsets();
   submitForm.addEventListener('click', onSubmitButtonClick);
   mainForm.querySelector('#room_number').addEventListener('change', onRoomNumberChange);
   mainForm.querySelector('#capacity').addEventListener('change', onCapacityChange);
