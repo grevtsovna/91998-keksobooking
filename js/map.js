@@ -204,9 +204,20 @@ window.mapModule = (function () {
       startCoords.coordX = evtMove.clientX;
       startCoords.coordY = evtMove.clientY;
 
+      if (startCoords.coordY > 150 && startCoords.coordY < 500) {
 
-      pin.style.left = (pin.offsetLeft + shift.coordX) + 'px';
-      pin.style.top = (pin.offsetTop + shift.coordY) + 'px';
+        var newCoords = {
+          x: pin.offsetLeft + shift.coordX,
+          y: pin.offsetTop + shift.coordY
+        };
+
+      }
+
+      if (newCoords.y > 150 && newCoords.y < 500) {
+        pin.style.top = newCoords.y + 'px';
+      }
+      pin.style.left = newCoords.x + 'px';
+
       window.formModule.setAddress(getAddress());
     };
 
