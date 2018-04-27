@@ -181,11 +181,33 @@ window.mapModule = (function () {
 
   // Обработчик клика по перетаскиваемому пину
   var onDraggablePinClick = function (evt) {
+    var pin = evt.currentTarget;
     var objects = generateObjects(8, window.util.generateData());
     showMapData(objects);
     window.formModule.activateForm();
     window.formModule.setAddress(getAddress());
-    evt.currentTarget.removeEventListener('mouseup', onDraggablePinClick);
+
+    var startCoords = {
+      coordX: evt.clientX,
+      coordY: evt.clientY
+    };
+
+    document.addEventListener('mousemove', function (evtMove) {
+      var shift = {
+        coordX: evtMove.clientX - startCoords.coordX,
+        coordY: evtMove.clientY - startCoords.coordY
+      };
+
+      startCoords.coordX = evtMove.clientX;
+      startCoords.coordY = evtMove.clientY;
+
+      console.log(startCoords);
+
+
+      pin.style.left = (pin.offsetLeft + shift.coordX) + 'px';
+      pin.style.top = (pin.offsetTop + shift.coordY) + 'px';
+    });
+
   };
 
   var fadeMap = function () {
