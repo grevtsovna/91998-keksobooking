@@ -179,20 +179,23 @@ window.mapModule = (function () {
     return coordX + ', ' + coordY;
   };
 
+  var onDraggablePinMouseUp = function (evt) {
+    var objects = generateObjects(8, window.util.generateData());
+    showMapData(objects);
+    evt.currentTarget.removeEventListener('mouseup', onDraggablePinMouseUp);
+  };
+
   // Обработчик клика по перетаскиваемому пину
   var onDraggablePinClick = function (evt) {
     var pin = evt.currentTarget;
-    var objects = generateObjects(8, window.util.generateData());
-    showMapData(objects);
     window.formModule.activateForm();
-    window.formModule.setAddress(getAddress());
 
     var startCoords = {
       coordX: evt.clientX,
       coordY: evt.clientY
     };
 
-    document.addEventListener('mousemove', function (evtMove) {
+    var onMouseMove = function (evtMove) {
       var shift = {
         coordX: evtMove.clientX - startCoords.coordX,
         coordY: evtMove.clientY - startCoords.coordY
@@ -201,22 +204,30 @@ window.mapModule = (function () {
       startCoords.coordX = evtMove.clientX;
       startCoords.coordY = evtMove.clientY;
 
-      console.log(startCoords);
-
 
       pin.style.left = (pin.offsetLeft + shift.coordX) + 'px';
       pin.style.top = (pin.offsetTop + shift.coordY) + 'px';
+      window.formModule.setAddress(getAddress());
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', function () {
+      window.formModule.setAddress(getAddress());
+      document.removeEventListener('mousemove', onMouseMove);
     });
 
   };
 
   var fadeMap = function () {
-    draggablePin.addEventListener('mouseup', onDraggablePinClick);
+    draggablePin.addEventListener('mouseup', onDraggablePinMouseUp);
+    draggablePin.style.left = '570px';
+    draggablePin.style.top = '375px';
     mapEl.classList.add('map--faded');
     window.formModule.setAddress(getAddress());
   };
 
-  draggablePin.addEventListener('mouseup', onDraggablePinClick);
+  draggablePin.addEventListener('mousedown', onDraggablePinClick);
+  draggablePin.addEventListener('mouseup', onDraggablePinMouseUp);
   window.formModule.setAddress(getAddress());
 
   return {
