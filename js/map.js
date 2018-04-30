@@ -186,7 +186,7 @@ window.mapModule = (function () {
   };
 
   var onDraggablePinMouseUp = function (evt) {
-    var objects = generateObjects(8, window.util.generateData());
+    var objects = generateObjects(8, window.data.generateData());
     showMapData(objects);
     window.formModule.activateForm();
     evt.currentTarget.removeEventListener('mouseup', onDraggablePinMouseUp);
