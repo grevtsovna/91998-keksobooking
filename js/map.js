@@ -1,19 +1,10 @@
 'use strict';
 
-window.mapModule = (function () {
+window.renderingObjectsModule = (function () {
   var MAP_PIN_WIDTH = 50;
   var MAP_PIN_HEIGHT = 70;
-  var MAP_MAIN_PIN_SIZE = 65;
-  var MAP_MAIN_PIN_ACTIVE_HEIGHT = 87;
-  var MAX_TOP_MAIN_PIN_POSITION = 150;
-  var MAX_BOTTOM_MAIN_PIN_POSITION = 500;
-  var draggablePin = document.querySelector('.map__pin--main');
   var templateElement = document.querySelector('template');
   var mapEl = document.querySelector('.map');
-  var draggablePinStartPosition = {
-    left: draggablePin.style.left,
-    top: draggablePin.style.top
-  };
   var offerTypeMap = {
     'flat': 'Квартира',
     'bungalo': 'Бунгало',
@@ -113,12 +104,31 @@ window.mapModule = (function () {
     mapPinsElement.appendChild(fragment);
   };
 
+  return {
+    mapEl: mapEl,
+
+    showMapData: showMapData
+  };
+
+})();
+
+window.pinModule = (function () {
+  var MAP_MAIN_PIN_SIZE = 65;
+  var MAP_MAIN_PIN_ACTIVE_HEIGHT = 87;
+  var MAX_TOP_MAIN_PIN_POSITION = 150;
+  var MAX_BOTTOM_MAIN_PIN_POSITION = 500;
+  var draggablePin = document.querySelector('.map__pin--main');
+  var draggablePinStartPosition = {
+    left: draggablePin.style.left,
+    top: draggablePin.style.top
+  };
+
   var getAddress = function () {
     var mainPin = document.querySelector('.map__pin--main');
     var offsetX = MAP_MAIN_PIN_SIZE / 2;
     var offsetY;
 
-    if (mapEl.classList.contains('map--faded')) {
+    if (window.renderingObjectsModule.mapEl.classList.contains('map--faded')) {
       offsetY = MAP_MAIN_PIN_SIZE / 2;
     } else {
       offsetY = MAP_MAIN_PIN_ACTIVE_HEIGHT;
@@ -131,7 +141,7 @@ window.mapModule = (function () {
 
   var onDraggablePinMouseUp = function (evt) {
     var objects = window.dataModule.generateObjects(8, window.dataModule.generateData());
-    showMapData(objects);
+    window.renderingObjectsModule.showMapData(objects);
     window.formModule.activateForm();
     evt.currentTarget.removeEventListener('mouseup', onDraggablePinMouseUp);
   };
@@ -194,7 +204,7 @@ window.mapModule = (function () {
     draggablePin.addEventListener('mouseup', onDraggablePinMouseUp);
     draggablePin.style.left = draggablePinStartPosition.left;
     draggablePin.style.top = draggablePinStartPosition.top;
-    mapEl.classList.add('map--faded');
+    window.renderingObjectsModule.mapEl.classList.add('map--faded');
     window.formModule.setAddress(getAddress());
   };
 
