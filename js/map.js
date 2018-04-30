@@ -8,12 +8,18 @@ window.mapModule = (function () {
   var MAX_TOP_MAIN_PIN_POSITION = 150;
   var MAX_BOTTOM_MAIN_PIN_POSITION = 500;
   var draggablePin = document.querySelector('.map__pin--main');
+  var templateElement = document.querySelector('template');
+  var mapEl = document.querySelector('.map');
   var draggablePinStartPosition = {
     left: draggablePin.style.left,
     top: draggablePin.style.top
   };
-  var templateElement = document.querySelector('template');
-  var mapEl = document.querySelector('.map');
+  var offerTypeMap = {
+    'flat': 'Квартира',
+    'bungalo': 'Бунгало',
+    'house': 'Дом',
+    'palace': 'Дворец'
+  };
 
   var renderMapPin = function (object) {
     var mapPinTemplate = templateElement.content.querySelector('.map__pin');
@@ -34,33 +40,10 @@ window.mapModule = (function () {
     document.querySelector('.map__card.popup').remove();
   };
 
-  var getOfferType = function (offerType) {
-    var type = '';
-
-    switch (offerType) {
-      case 'flat' :
-        type = 'Квартира';
-        break;
-      case 'bungalo' :
-        type = 'Бунгало';
-        break;
-      case 'house' :
-        type = 'Дом';
-        break;
-      case 'palace' :
-        type = 'Дворец';
-        break;
-      default :
-        type = 'Неизвестный тип жилья';
-    }
-
-    return type;
-  };
-
   var renderMapCard = function (object) {
     var mapCardElement = templateElement.content.querySelector('.map__card').cloneNode(true);
     var offer = object.offer;
-    var type = getOfferType(offer.type);
+    var type = offerTypeMap[offer.type];
     var features = mapCardElement.querySelectorAll('.popup__feature');
 
     mapCardElement.querySelector('.popup__title').textContent = offer.title;

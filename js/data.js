@@ -57,7 +57,7 @@ window.dataModule = (function () {
   };
 
   return {
-    generateData: generateDataб
+    generateData: generateData,
     generateObjects: generateObjects
   };
 })();
