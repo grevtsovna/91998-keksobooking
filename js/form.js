@@ -6,6 +6,24 @@ window.formModule = (function () {
   var submitForm = mainForm.querySelector('.ad-form__submit');
   var fieldsets = document.querySelectorAll('.ad-form fieldset');
   var resetPageButton = document.querySelector('.ad-form__reset');
+  var roomPriceMap = {
+    'bungalo': {
+      min: '0',
+      placeholder: '0'
+    },
+    'flat': {
+      min: '1000',
+      placeholder: '1 000'
+    },
+    'house': {
+      min: '5000',
+      placeholder: '5 000'
+    },
+    'palace': {
+      min: '10000',
+      placeholder: '10 000'
+    }
+  };
 
   // Функция, деактивирующая поля формы
   var disableFormFieldsets = function () {
@@ -16,24 +34,10 @@ window.formModule = (function () {
 
   var onRoomTypeChange = function (evt) {
     var priceInput = mainForm.querySelector('#price');
+    var roomType = evt.target.value;
 
-    switch (evt.target.value) {
-      case 'bungalo':
-        priceInput.min = '0';
-        priceInput.placeholder = '0';
-        break;
-      case 'flat':
-        priceInput.min = '1000';
-        priceInput.placeholder = '1 000';
-        break;
-      case 'house':
-        priceInput.min = '5000';
-        priceInput.placeholder = '5 000';
-        break;
-      case 'palace':
-        priceInput.min = '10000';
-        priceInput.placeholder = '10 000';
-    }
+    priceInput.min = roomPriceMap[roomType].min;
+    priceInput.placeholder = roomPriceMap[roomType].placeholder;
   };
 
   var onTimeInputsChange = function (evt) {
