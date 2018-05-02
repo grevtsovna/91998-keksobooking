@@ -140,8 +140,9 @@ window.pinModule = (function () {
   };
 
   var onDraggablePinMouseUp = function (evt) {
-    var objects = window.dataModule.generateObjects(8, window.dataModule.generateData());
-    window.renderingObjectsModule.showMapData(objects);
+    // var objects = window.dataModule.generateObjects(8, window.dataModule.generateData());
+    var objects = window.dataModule.loadObjects();
+    // window.renderingObjectsModule.showMapData(objects);
     window.formModule.activateForm();
     evt.currentTarget.removeEventListener('mouseup', onDraggablePinMouseUp);
   };

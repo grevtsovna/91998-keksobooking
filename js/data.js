@@ -56,8 +56,19 @@ window.dataModule = (function () {
     return objects;
   };
 
+  var loadObjects = function () {
+    var URL = 'https://js.dump.academy/keksobooking/data';
+
+    var onSuccess = function (objects) {
+      window.renderingObjectsModule.showMapData(objects);
+    };
+
+    window.backendModule.loadData(URL, onSuccess);
+  };
+
   return {
     generateData: generateData,
-    generateObjects: generateObjects
+    generateObjects: generateObjects,
+    loadObjects: loadObjects
   };
 })();
