@@ -62,19 +62,18 @@ window.formModule = (function () {
   };
 
   var checkAllInputs = function () {
+    var isValid = true;
     var mainFormInputs = mainForm.querySelectorAll('input, select');
     for (var i = 0; i < mainFormInputs.length; i++) {
       if (mainFormInputs[i].validity.valid) {
         mainFormInputs[i].style.border = '';
       } else {
         mainFormInputs[i].style.border = '1px solid red';
+        isValid = false;
       }
     }
-  };
 
-  var validateForm = function () {
-    validateRoomNumber();
-    checkAllInputs();
+    return isValid;
   };
 
   var clearValidationStyle = function () {
@@ -101,8 +100,17 @@ window.formModule = (function () {
     mainForm.classList.add('ad-form--disabled');
   };
 
-  var onSubmitButtonClick = function () {
-    validateForm();
+  var sendForm = function () {
+    document.querySelector('.success').classList.remove('hidden');
+  };
+
+  var onSubmitButtonClick = function (evt) {
+    evt.preventDefault();
+    validateRoomNumber();
+    var isValid = checkAllInputs();
+    if (isValid) {
+      sendForm();
+    }
   };
 
   var onRoomNumberChange = function () {
