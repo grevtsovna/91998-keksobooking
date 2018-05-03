@@ -58,11 +58,22 @@ window.util = (function () {
 
     return preparedArr.slice(0, quantity + 1);
   };
+
+  var getElementCoords = function (element) {
+    var coords = element.getBoundingClientRect();
+
+    return {
+      top: coords.top - pageYOffset,
+      left: coords.left - pageXOffset,
+      right: coords.left - pageXOffset + element.offsetWidth
+    };
+  };
   return {
     generateData: generateData,
     getRandomInt: getRandomInt,
     getRandomArrayElement: getRandomArrayElement,
     shuffleArray: shuffleArray,
-    getShuffledArrayOfCertainLength: getShuffledArrayOfCertainLength
+    getShuffledArrayOfCertainLength: getShuffledArrayOfCertainLength,
+    getElementCoords: getElementCoords
   };
 })();
