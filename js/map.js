@@ -1,57 +1,15 @@
 'use strict';
 
-window.mapModule = (function () {
+window.renderingObjectsModule = (function () {
   var MAP_PIN_WIDTH = 50;
   var MAP_PIN_HEIGHT = 70;
-  var MAP_MAIN_PIN_SIZE = 65;
-  var MAP_MAIN_PIN_ACTIVE_HEIGHT = 87;
-  var MAX_TOP_MAIN_PIN_POSITION = 150;
-  var MAX_BOTTOM_MAIN_PIN_POSITION = 500;
-  var draggablePin = document.querySelector('.map__pin--main');
-  var draggablePinStartPosition = {
-    left: draggablePin.style.left,
-    top: draggablePin.style.top
-  };
   var templateElement = document.querySelector('template');
   var mapEl = document.querySelector('.map');
-
-  // Функция, возвращающая массив объектов со случайными данными
-  var generateObjects = function (quantity, data) {
-    var objects = [];
-    var preparedAvatars = window.util.getShuffledArrayOfCertainLength(quantity, data.avatars);
-    var preparedTitles = window.util.getShuffledArrayOfCertainLength(quantity, data.titles);
-
-    for (var i = 0; i < quantity; i++) {
-      var object = {};
-      var randInt = window.util.getRandomInt(1, data.features.length);
-
-      object.author = {};
-      object.author.avatar = preparedAvatars[i];
-
-      object.offer = {};
-      var offer = object.offer;
-      offer.title = preparedTitles[i];
-
-      object.location = {};
-      object.location.x = window.util.getRandomInt(300, 900);
-      object.location.y = window.util.getRandomInt(150, 500);
-
-      offer.address = object.location.x + ', ' + object.location.y;
-      offer.price = window.util.getRandomInt(1000, 1000000);
-      offer.type = window.util.getRandomArrayElement(data.types);
-      offer.rooms = window.util.getRandomInt(1, 5);
-      offer.guests = window.util.getRandomInt(1, 15);
-      offer.checkin = window.util.getRandomArrayElement(data.times);
-      offer.checkout = window.util.getRandomArrayElement(data.times);
-      offer.features = window.util.getShuffledArrayOfCertainLength(randInt, data.features);
-
-      offer.description = '';
-      offer.photos = window.util.shuffleArray(data.photos);
-
-      objects.push(object);
-    }
-
-    return objects;
+  var offerTypeMap = {
+    'flat': 'Квартира',
+    'bungalo': 'Бунгало',
+    'house': 'Дом',
+    'palace': 'Дворец'
   };
 
   var renderMapPin = function (object) {
@@ -73,33 +31,10 @@ window.mapModule = (function () {
     document.querySelector('.map__card.popup').remove();
   };
 
-  var getOfferType = function (offerType) {
-    var type = '';
-
-    switch (offerType) {
-      case 'flat' :
-        type = 'Квартира';
-        break;
-      case 'bungalo' :
-        type = 'Бунгало';
-        break;
-      case 'house' :
-        type = 'Дом';
-        break;
-      case 'palace' :
-        type = 'Дворец';
-        break;
-      default :
-        type = 'Неизвестный тип жилья';
-    }
-
-    return type;
-  };
-
   var renderMapCard = function (object) {
     var mapCardElement = templateElement.content.querySelector('.map__card').cloneNode(true);
     var offer = object.offer;
-    var type = getOfferType(offer.type);
+    var type = offerTypeMap[offer.type];
     var features = mapCardElement.querySelectorAll('.popup__feature');
 
     mapCardElement.querySelector('.popup__title').textContent = offer.title;
@@ -169,12 +104,31 @@ window.mapModule = (function () {
     mapPinsElement.appendChild(fragment);
   };
 
+  return {
+    mapEl: mapEl,
+
+    showMapData: showMapData
+  };
+
+})();
+
+window.pinModule = (function () {
+  var MAP_MAIN_PIN_SIZE = 65;
+  var MAP_MAIN_PIN_ACTIVE_HEIGHT = 87;
+  var MAX_TOP_MAIN_PIN_POSITION = 150;
+  var MAX_BOTTOM_MAIN_PIN_POSITION = 500;
+  var draggablePin = document.querySelector('.map__pin--main');
+  var draggablePinStartPosition = {
+    left: draggablePin.style.left,
+    top: draggablePin.style.top
+  };
+
   var getAddress = function () {
     var mainPin = document.querySelector('.map__pin--main');
     var offsetX = MAP_MAIN_PIN_SIZE / 2;
     var offsetY;
 
-    if (mapEl.classList.contains('map--faded')) {
+    if (window.renderingObjectsModule.mapEl.classList.contains('map--faded')) {
       offsetY = MAP_MAIN_PIN_SIZE / 2;
     } else {
       offsetY = MAP_MAIN_PIN_ACTIVE_HEIGHT;
@@ -186,8 +140,8 @@ window.mapModule = (function () {
   };
 
   var onDraggablePinMouseUp = function (evt) {
-    var objects = generateObjects(8, window.util.generateData());
-    showMapData(objects);
+    var objects = window.dataModule.generateObjects(8, window.dataModule.generateData());
+    window.renderingObjectsModule.showMapData(objects);
     window.formModule.activateForm();
     evt.currentTarget.removeEventListener('mouseup', onDraggablePinMouseUp);
   };
@@ -250,7 +204,7 @@ window.mapModule = (function () {
     draggablePin.addEventListener('mouseup', onDraggablePinMouseUp);
     draggablePin.style.left = draggablePinStartPosition.left;
     draggablePin.style.top = draggablePinStartPosition.top;
-    mapEl.classList.add('map--faded');
+    window.renderingObjectsModule.mapEl.classList.add('map--faded');
     window.formModule.setAddress(getAddress());
   };
 
