@@ -63,7 +63,7 @@ window.dataModule = (function () {
       window.renderingObjectsModule.showMapData(objects);
     };
 
-    window.backendModule.loadData(URL, onSuccess);
+    window.backendModule.loadData(onSuccess);
   };
 
   return {

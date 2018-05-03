@@ -100,17 +100,29 @@ window.formModule = (function () {
     mainForm.classList.add('ad-form--disabled');
   };
 
-  var sendForm = function () {
+  var showErrors = function (error) {
+    var errorEl = document.createElement('div');
+    errorEl.style.cssText = 'position: fixed; top: 0; left: 0; background: #ed5d50; color: #fff; padding: 10px; width: 100%';
+    errorEl.textContent = error;
+    document.querySelector('body').appendChild(errorEl);
+    setTimeout(function() {
+      errorEl.remove();
+    }, 5000);
+  };
+
+  var onSuccessFormSubmit = function () {
     document.querySelector('.success').classList.remove('hidden');
   };
 
-  var onSubmitButtonClick = function (evt) {
+  var onMainFormSubmit = function (evt) {
     evt.preventDefault();
+    mainForm.querySelector('[name=address]').removeAttribute('disabled');
+    window.backendModule.uploadData(new FormData(mainForm), onSuccessFormSubmit, showErrors);
+  };
+
+  var onSubmitButtonClick = function () {
     validateRoomNumber();
-    var isValid = checkAllInputs();
-    if (isValid) {
-      sendForm();
-    }
+    checkAllInputs();
   };
 
   var onRoomNumberChange = function () {
@@ -139,6 +151,7 @@ window.formModule = (function () {
   mainForm.querySelector('#timeout').addEventListener('change', onTimeInputsChange);
   mainForm.querySelector('#type').addEventListener('change', onRoomTypeChange);
   resetPageButton.addEventListener('click', onResetPageButtonClick);
+  mainForm.addEventListener('submit', onMainFormSubmit);
 
   return {
     // Функция, активирующая форму
