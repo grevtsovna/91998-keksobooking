@@ -3,7 +3,6 @@
 (function () {
   var PALACE_ROOM_NUMBER = 100;
   var mainForm = document.querySelector('.ad-form');
-  var addressInput = mainForm.querySelector('[name=address]');
   var submitForm = mainForm.querySelector('.ad-form__submit');
   var fieldsets = document.querySelectorAll('.ad-form fieldset');
   var resetPageButton = document.querySelector('.ad-form__reset');
@@ -96,7 +95,6 @@
       mapCard.remove();
     }
     window.pin.fadeMap();
-    addressInput.setAttribute('disabled', 'disabled');
     clearValidationStyle();
     disableFormFieldsets();
     mainForm.classList.add('ad-form--disabled');
@@ -113,7 +111,6 @@
 
   var onMainFormSubmit = function (evt) {
     evt.preventDefault();
-    addressInput.removeAttribute('disabled');
     window.backend.uploadData(new FormData(mainForm), onSuccessFormSubmit, window.backend.showErrors);
   };
 
