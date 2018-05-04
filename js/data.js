@@ -1,6 +1,6 @@
 'use strict';
 
-window.dataModule = (function () {
+(function () {
   // Функция, генерирующая объект с данными
   var generateData = function () {
     var data = {};
@@ -58,13 +58,13 @@ window.dataModule = (function () {
 
   var loadObjects = function () {
     var onSuccess = function (objects) {
-      window.renderingObjectsModule.showMapData(objects);
+      window.rendering.showMapData(objects);
     };
 
-    window.backendModule.loadData(onSuccess, window.backendModule.showErrors);
+    window.backend.loadData(onSuccess, window.backend.showErrors);
   };
 
-  return {
+  window.data = {
     generateData: generateData,
     generateObjects: generateObjects,
     loadObjects: loadObjects

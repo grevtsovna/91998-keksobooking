@@ -1,6 +1,6 @@
 'use strict';
 
-window.formModule = (function () {
+(function () {
   var PALACE_ROOM_NUMBER = 100;
   var mainForm = document.querySelector('.ad-form');
   var addressInput = mainForm.querySelector('[name=address]');
@@ -95,7 +95,7 @@ window.formModule = (function () {
     if (document.contains(mapCard)) {
       mapCard.remove();
     }
-    window.pinModule.fadeMap();
+    window.pin.fadeMap();
     addressInput.setAttribute('disabled', 'disabled');
     clearValidationStyle();
     disableFormFieldsets();
@@ -114,7 +114,7 @@ window.formModule = (function () {
   var onMainFormSubmit = function (evt) {
     evt.preventDefault();
     addressInput.removeAttribute('disabled');
-    window.backendModule.uploadData(new FormData(mainForm), onSuccessFormSubmit, window.backendModule.showErrors);
+    window.backend.uploadData(new FormData(mainForm), onSuccessFormSubmit, window.backend.showErrors);
   };
 
   var onSubmitButtonClick = function () {
@@ -139,6 +139,13 @@ window.formModule = (function () {
     document.querySelector('#address').value = address;
   };
 
+  var activateForm = function () {
+    mainForm.classList.remove('ad-form--disabled');
+    for (var i = 0; i < fieldsets.length; i++) {
+      fieldsets[i].removeAttribute('disabled');
+    }
+  };
+
 
   disableFormFieldsets();
   submitForm.addEventListener('click', onSubmitButtonClick);
@@ -150,14 +157,9 @@ window.formModule = (function () {
   resetPageButton.addEventListener('click', onResetPageButtonClick);
   mainForm.addEventListener('submit', onMainFormSubmit);
 
-  return {
+  window.form = {
     // Функция, активирующая форму
-    activateForm: function () {
-      mainForm.classList.remove('ad-form--disabled');
-      for (var i = 0; i < fieldsets.length; i++) {
-        fieldsets[i].removeAttribute('disabled');
-      }
-    },
+    activateForm: activateForm,
     setAddress: setAddress
   };
 })();

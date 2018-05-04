@@ -1,6 +1,6 @@
 'use strict';
 
-window.util = (function () {
+(function () {
   // Функция, возвращающая случайное целое число в интервале [min, max]
   var getRandomInt = function (min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -52,7 +52,8 @@ window.util = (function () {
       right: coords.left - pageXOffset + element.offsetWidth
     };
   };
-  return {
+
+  window.util = {
     getRandomInt: getRandomInt,
     getRandomArrayElement: getRandomArrayElement,
     shuffleArray: shuffleArray,

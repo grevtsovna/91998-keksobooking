@@ -1,6 +1,6 @@
 'use strict';
 
-window.backendModule = (function () {
+(function () {
   var UPLOAD_URL = 'https://js.dump.academy/keksobooking';
   var LOAD_URL = 'https://js.dump.academy/keksobooking/data';
   var TIMEOUT = 5000;
@@ -50,7 +50,7 @@ window.backendModule = (function () {
     }, 5000);
   };
 
-  return {
+  window.backend = {
     loadData: loadData,
     uploadData: uploadData,
     showErrors: showErrors
