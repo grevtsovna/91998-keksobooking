@@ -146,7 +146,6 @@
     }
   };
 
-
   disableFormFieldsets();
   submitForm.addEventListener('click', onSubmitButtonClick);
   mainForm.querySelector('#room_number').addEventListener('change', onRoomNumberChange);
@@ -158,7 +157,6 @@
   mainForm.addEventListener('submit', onMainFormSubmit);
 
   window.form = {
-    // Функция, активирующая форму
     activateForm: activateForm,
     setAddress: setAddress
   };

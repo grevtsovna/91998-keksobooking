@@ -78,6 +78,7 @@
 
       window.form.setAddress(getAddress());
     };
+
     var onMouseUp = function () {
       window.form.setAddress(getAddress());
       document.removeEventListener('mousemove', onMouseMove);
