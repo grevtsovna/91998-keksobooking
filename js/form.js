@@ -3,6 +3,7 @@
 window.formModule = (function () {
   var PALACE_ROOM_NUMBER = 100;
   var mainForm = document.querySelector('.ad-form');
+  var addressInput = mainForm.querySelector('[name=address]');
   var submitForm = mainForm.querySelector('.ad-form__submit');
   var fieldsets = document.querySelectorAll('.ad-form fieldset');
   var resetPageButton = document.querySelector('.ad-form__reset');
@@ -94,30 +95,26 @@ window.formModule = (function () {
     if (document.contains(mapCard)) {
       mapCard.remove();
     }
-    window.mapModule.fadeMap();
+    window.pinModule.fadeMap();
+    addressInput.setAttribute('disabled', 'disabled');
     clearValidationStyle();
     disableFormFieldsets();
     mainForm.classList.add('ad-form--disabled');
   };
 
-  var showErrors = function (error) {
-    var errorEl = document.createElement('div');
-    errorEl.style.cssText = 'position: fixed; top: 0; left: 0; background: #ed5d50; color: #fff; padding: 10px; width: 100%';
-    errorEl.textContent = error;
-    document.querySelector('body').appendChild(errorEl);
-    setTimeout(function() {
-      errorEl.remove();
-    }, 5000);
-  };
-
   var onSuccessFormSubmit = function () {
-    document.querySelector('.success').classList.remove('hidden');
+    var successEl = document.querySelector('.success');
+    successEl.classList.remove('hidden');
+    resetPage();
+    setTimeout(function () {
+      successEl.classList.add('hidden');
+    }, 3000);
   };
 
   var onMainFormSubmit = function (evt) {
     evt.preventDefault();
-    mainForm.querySelector('[name=address]').removeAttribute('disabled');
-    window.backendModule.uploadData(new FormData(mainForm), onSuccessFormSubmit, showErrors);
+    addressInput.removeAttribute('disabled');
+    window.backendModule.uploadData(new FormData(mainForm), onSuccessFormSubmit, window.backendModule.showErrors);
   };
 
   var onSubmitButtonClick = function () {

@@ -57,13 +57,11 @@ window.dataModule = (function () {
   };
 
   var loadObjects = function () {
-    var URL = 'https://js.dump.academy/keksobooking/data';
-
     var onSuccess = function (objects) {
       window.renderingObjectsModule.showMapData(objects);
     };
 
-    window.backendModule.loadData(onSuccess);
+    window.backendModule.loadData(onSuccess, window.backendModule.showErrors);
   };
 
   return {
