@@ -5,6 +5,7 @@
   var MAP_PIN_HEIGHT = 70;
   var templateElement = document.querySelector('template');
   var mapEl = document.querySelector('.map');
+  var filterElements = document.querySelectorAll('.map__filters select, .map__filters input');
   var offerTypeMap = {
     'flat': 'Квартира',
     'bungalo': 'Бунгало',
@@ -90,18 +91,25 @@
   };
 
   var showMapData = function (objects) {
+    var limitedObjects = objects.slice(0, 5);
     var fragment = document.createDocumentFragment();
     var mapPinsElement = document.querySelector('.map__pins');
-
     mapEl.classList.remove('map--faded');
 
-    for (var i = 0; i < objects.length; i++) {
-      var mapPin = renderMapPin(objects[i]);
-      mapPin.addEventListener('click', onMapPinClick(objects[i]));
+    limitedObjects.forEach(function (object) {
+      var mapPin = renderMapPin(object);
+      mapPin.addEventListener('click', onMapPinClick(object));
       fragment.appendChild(mapPin);
-    }
+    });
 
     mapPinsElement.appendChild(fragment);
+  };
+
+  var removeMapData = function () {
+    var pins = document.querySelectorAll('.map__pins .map__pin:not(.map__pin--main)');
+    Array.from(pins).forEach(function (item) {
+      item.remove();
+    });
   };
 
   var fadeMap = function () {
@@ -109,9 +117,17 @@
     window.pin.resetDraggablePin();
   };
 
+  var addFilterEvents = function (objects) {
+    Array.from(filterElements).forEach(function (item) {
+      item.addEventListener('change', window.filter.filterObjects(objects));
+    });
+  };
+
   window.map = {
     mapEl: mapEl,
     showMapData: showMapData,
-    fadeMap: fadeMap
+    fadeMap: fadeMap,
+    removeMapData: removeMapData,
+    addFilterEvents: addFilterEvents
   };
 })();
