@@ -7,7 +7,7 @@
       window.rendering.showMapData(objects);
     };
 
-    window.backend.loadData(onSuccess, window.backend.showErrors);
+    window.backend.loadData(onSuccess, window.util.showErrors);
   };
 
   window.data = {

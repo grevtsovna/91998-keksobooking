@@ -104,7 +104,7 @@
 
   var onMainFormSubmit = function (evt) {
     evt.preventDefault();
-    window.backend.uploadData(new FormData(mainForm), onSuccessFormSubmit, window.backend.showErrors);
+    window.backend.uploadData(new FormData(mainForm), onSuccessFormSubmit, window.util.showErrors);
   };
 
   var onSubmitButtonClick = function () {

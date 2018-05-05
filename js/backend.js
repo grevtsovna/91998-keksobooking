@@ -40,19 +40,8 @@
     xhr.send(data);
   };
 
-  var showErrors = function (error) {
-    var errorEl = document.createElement('div');
-    errorEl.style.cssText = 'position: fixed; top: 0; left: 0; background: #ed5d50; color: #fff; padding: 10px; width: 100%';
-    errorEl.textContent = error;
-    document.querySelector('body').appendChild(errorEl);
-    setTimeout(function () {
-      errorEl.remove();
-    }, 5000);
-  };
-
   window.backend = {
     loadData: loadData,
-    uploadData: uploadData,
-    showErrors: showErrors
+    uploadData: uploadData
   };
 })();
