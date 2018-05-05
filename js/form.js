@@ -1,6 +1,6 @@
 'use strict';
 
-window.formModule = (function () {
+(function () {
   var PALACE_ROOM_NUMBER = 100;
   var mainForm = document.querySelector('.ad-form');
   var submitForm = mainForm.querySelector('.ad-form__submit');
@@ -64,17 +64,9 @@ window.formModule = (function () {
   var checkAllInputs = function () {
     var mainFormInputs = mainForm.querySelectorAll('input, select');
     for (var i = 0; i < mainFormInputs.length; i++) {
-      if (mainFormInputs[i].validity.valid) {
-        mainFormInputs[i].style.border = '';
-      } else {
-        mainFormInputs[i].style.border = '1px solid red';
-      }
+      var borderStyle = mainFormInputs[i].validity.valid ? '' : '1px solid red';
+      mainFormInputs[i].style.border = borderStyle;
     }
-  };
-
-  var validateForm = function () {
-    validateRoomNumber();
-    checkAllInputs();
   };
 
   var clearValidationStyle = function () {
@@ -95,14 +87,29 @@ window.formModule = (function () {
     if (document.contains(mapCard)) {
       mapCard.remove();
     }
-    window.mapModule.fadeMap();
+    window.map.fadeMap();
     clearValidationStyle();
     disableFormFieldsets();
     mainForm.classList.add('ad-form--disabled');
   };
 
+  var onSuccessFormSubmit = function () {
+    var successEl = document.querySelector('.success');
+    successEl.classList.remove('hidden');
+    resetPage();
+    setTimeout(function () {
+      successEl.classList.add('hidden');
+    }, 3000);
+  };
+
+  var onMainFormSubmit = function (evt) {
+    evt.preventDefault();
+    window.backend.uploadData(new FormData(mainForm), onSuccessFormSubmit, window.util.showErrors);
+  };
+
   var onSubmitButtonClick = function () {
-    validateForm();
+    validateRoomNumber();
+    checkAllInputs();
   };
 
   var onRoomNumberChange = function () {
@@ -122,6 +129,12 @@ window.formModule = (function () {
     document.querySelector('#address').value = address;
   };
 
+  var activateForm = function () {
+    mainForm.classList.remove('ad-form--disabled');
+    for (var i = 0; i < fieldsets.length; i++) {
+      fieldsets[i].removeAttribute('disabled');
+    }
+  };
 
   disableFormFieldsets();
   submitForm.addEventListener('click', onSubmitButtonClick);
@@ -131,15 +144,10 @@ window.formModule = (function () {
   mainForm.querySelector('#timeout').addEventListener('change', onTimeInputsChange);
   mainForm.querySelector('#type').addEventListener('change', onRoomTypeChange);
   resetPageButton.addEventListener('click', onResetPageButtonClick);
+  mainForm.addEventListener('submit', onMainFormSubmit);
 
-  return {
-    // Функция, активирующая форму
-    activateForm: function () {
-      mainForm.classList.remove('ad-form--disabled');
-      for (var i = 0; i < fieldsets.length; i++) {
-        fieldsets[i].removeAttribute('disabled');
-      }
-    },
+  window.form = {
+    activateForm: activateForm,
     setAddress: setAddress
   };
 })();
