@@ -28,7 +28,7 @@
   };
 
   var onDraggablePinMouseUp = function (evt) {
-    window.data.loadObjects();
+    window.backend.loadData(window.rendering.showMapData, window.util.showErrors);
     window.form.activateForm();
     evt.currentTarget.removeEventListener('mouseup', onDraggablePinMouseUp);
   };
