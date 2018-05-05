@@ -16,7 +16,7 @@
     var offsetX = MAP_MAIN_PIN_SIZE / 2;
     var offsetY;
 
-    if (window.rendering.mapEl.classList.contains('map--faded')) {
+    if (window.map.mapEl.classList.contains('map--faded')) {
       offsetY = MAP_MAIN_PIN_SIZE / 2;
     } else {
       offsetY = MAP_MAIN_PIN_ACTIVE_HEIGHT;
@@ -28,7 +28,7 @@
   };
 
   var onDraggablePinMouseUp = function (evt) {
-    window.backend.loadData(window.rendering.showMapData, window.util.showErrors);
+    window.backend.loadData(window.map.showMapData, window.util.showErrors);
     window.form.activateForm();
     evt.currentTarget.removeEventListener('mouseup', onDraggablePinMouseUp);
   };
@@ -92,7 +92,7 @@
     draggablePin.addEventListener('mouseup', onDraggablePinMouseUp);
     draggablePin.style.left = draggablePinStartPosition.left;
     draggablePin.style.top = draggablePinStartPosition.top;
-    window.rendering.mapEl.classList.add('map--faded');
+    window.map.mapEl.classList.add('map--faded');
     window.form.setAddress(getAddress());
   };
 

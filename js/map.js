@@ -104,7 +104,7 @@
     mapPinsElement.appendChild(fragment);
   };
 
-  window.rendering = {
+  window.map = {
     mapEl: mapEl,
     showMapData: showMapData
   };
