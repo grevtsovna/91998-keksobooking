@@ -104,8 +104,14 @@
     mapPinsElement.appendChild(fragment);
   };
 
+  var fadeMap = function () {
+    window.map.mapEl.classList.add('map--faded');
+    window.pin.resetDraggablePin();
+  };
+
   window.map = {
     mapEl: mapEl,
-    showMapData: showMapData
+    showMapData: showMapData,
+    fadeMap: fadeMap
   };
 })();

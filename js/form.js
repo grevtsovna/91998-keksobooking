@@ -87,7 +87,7 @@
     if (document.contains(mapCard)) {
       mapCard.remove();
     }
-    window.pin.fadeMap();
+    window.map.fadeMap();
     clearValidationStyle();
     disableFormFieldsets();
     mainForm.classList.add('ad-form--disabled');

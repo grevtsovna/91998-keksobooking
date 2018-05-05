@@ -88,11 +88,10 @@
     document.addEventListener('mouseup', onMouseUp);
   };
 
-  var fadeMap = function () {
+  var resetDraggablePin = function () {
     draggablePin.addEventListener('mouseup', onDraggablePinMouseUp);
     draggablePin.style.left = draggablePinStartPosition.left;
     draggablePin.style.top = draggablePinStartPosition.top;
-    window.map.mapEl.classList.add('map--faded');
     window.form.setAddress(getAddress());
   };
 
@@ -101,6 +100,6 @@
   window.form.setAddress(getAddress());
 
   window.pin = {
-    fadeMap: fadeMap
+    resetDraggablePin: resetDraggablePin
   };
 })();
