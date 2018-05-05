@@ -62,18 +62,11 @@
   };
 
   var checkAllInputs = function () {
-    var isValid = true;
     var mainFormInputs = mainForm.querySelectorAll('input, select');
     for (var i = 0; i < mainFormInputs.length; i++) {
-      if (mainFormInputs[i].validity.valid) {
-        mainFormInputs[i].style.border = '';
-      } else {
-        mainFormInputs[i].style.border = '1px solid red';
-        isValid = false;
-      }
+      var borderStyle = mainFormInputs[i].validity.valid ? '' : '1px solid red';
+      mainFormInputs[i].style.border = borderStyle;
     }
-
-    return isValid;
   };
 
   var clearValidationStyle = function () {
