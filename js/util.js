@@ -22,8 +22,23 @@
     }, 5000);
   };
 
+  var debounce = function (func, debouncePeriod) {
+    var lastTimeout;
+    return function () {
+      var _args = arguments;
+      var callFunc = function () {
+        func.apply(null, _args);
+      };
+      if (lastTimeout) {
+        clearTimeout(lastTimeout);
+      }
+      lastTimeout = setTimeout(callFunc, debouncePeriod);
+    };
+  };
+
   window.util = {
     getElementCoords: getElementCoords,
-    showErrors: showErrors
+    showErrors: showErrors,
+    debounce: debounce
   };
 })();
