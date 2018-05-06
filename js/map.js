@@ -65,6 +65,10 @@
       mapCardElement.querySelector(featureClass).style.display = 'inline-block';
     }
 
+    if (offer.features.length === 0) {
+      mapCardElement.querySelector('.popup__features').remove();
+    }
+
     for (i = 0; i < offer.photos.length; i++) {
       if (i === 0) {
         mapCardElement.querySelector('.popup__photos img').src = offer.photos[i];
@@ -79,6 +83,10 @@
       photo.classList.add('popup__photo');
 
       mapCardElement.querySelector('.popup__photos').appendChild(photo);
+    }
+
+    if (offer.photos.length === 0) {
+      mapCardElement.querySelector('.popup__photos').remove();
     }
 
     mapCardElement.querySelector('.popup__close').addEventListener('click', onPopupCloseClick);
