@@ -70,7 +70,7 @@
       if (newCoords.y < MAX_TOP_MAIN_PIN_POSITION || cursorCoords.y < MAX_TOP_MAIN_PIN_POSITION) {
         pin.style.top = MAX_TOP_MAIN_PIN_POSITION + 'px';
       }
-      if (newCoords.y > MAX_BOTTOM_MAIN_PIN_POSITION || cursorCoords.y > MAX_BOTTOM_MAIN_PIN_POSITION) {
+      if (newCoords.y > MAX_BOTTOM_MAIN_PIN_POSITION || cursorCoords.y > MAX_BOTTOM_MAIN_PIN_POSITION + MAP_MAIN_PIN_ACTIVE_HEIGHT) {
         pin.style.top = MAX_BOTTOM_MAIN_PIN_POSITION + 'px';
       }
       if (newCoords.x < 0 || cursorCoords.x < pinContainerCoords.left) {
