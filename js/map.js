@@ -148,9 +148,9 @@
   };
 
   var addFilterEvents = function (objects) {
-    var debouncedFilterObject = window.util.debounce(runFilter, 500);
+    var debouncedFilterObject = window.util.debounce(runFilter(objects), 500);
     Array.from(filterElements).forEach(function (item) {
-      item.addEventListener('change', debouncedFilterObject(objects));
+      item.addEventListener('change', debouncedFilterObject);
     });
   };
 

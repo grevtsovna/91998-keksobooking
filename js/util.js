@@ -23,18 +23,16 @@
   };
 
   var debounce = function (func, debouncePeriod) {
+    var lastTimeout;
     return function () {
       var _args = arguments;
-      var lastTimeout;
-      return function () {
-        var callFunc = function () {
-          return func.apply(null, _args);
-        };
-        if (lastTimeout) {
-          clearTimeout(lastTimeout);
-        }
-        lastTimeout = setTimeout(callFunc(), debouncePeriod);
+      var callFunc = function () {
+        func.apply(null, _args);
       };
+      if (lastTimeout) {
+        clearTimeout(lastTimeout);
+      }
+      lastTimeout = setTimeout(callFunc, debouncePeriod);
     };
   };
 
