@@ -84,6 +84,7 @@
         filteredObjects = filteredObjects.filter(filterByNumericValue('housing-guests', 'guests'));
         filteredObjects = filteredObjects.filter(filterByFeatures);
 
+        window.map.closePopupCard();
         window.map.removeMapData();
         window.map.showMapData(filteredObjects);
       }, 500);

@@ -28,8 +28,15 @@
     return mapPinElement;
   };
 
+  var closePopupCard = function () {
+    var openedPopup = document.querySelector('.map__card.popup');
+    if (document.body.contains(openedPopup)) {
+      openedPopup.remove();
+    }
+  };
+
   var onPopupCloseClick = function () {
-    document.querySelector('.map__card.popup').remove();
+    closePopupCard();
   };
 
   var renderMapCard = function (object) {
@@ -81,10 +88,7 @@
 
   var onMapPinClick = function (object) {
     return function () {
-      var openedPopup = document.querySelector('.map__card.popup');
-      if (document.body.contains(openedPopup)) {
-        openedPopup.remove();
-      }
+      closePopupCard();
       var mapCard = renderMapCard(object);
       document.querySelector('.map__filters-container').insertAdjacentElement('beforebegin', mapCard);
     };
@@ -128,6 +132,7 @@
     showMapData: showMapData,
     fadeMap: fadeMap,
     removeMapData: removeMapData,
-    addFilterEvents: addFilterEvents
+    addFilterEvents: addFilterEvents,
+    closePopupCard: closePopupCard
   };
 })();
