@@ -32,13 +32,20 @@
   var closePopupCard = function () {
     var openedPopup = document.querySelector('.map__card.popup');
     if (document.body.contains(openedPopup)) {
-      document.removeEventListener('keydown', window.onDocumentKeydown);
+      document.removeEventListener('keydown', onDocumentKeydown);
       openedPopup.remove();
     }
   };
 
   var onPopupCloseClick = function () {
     closePopupCard();
+  };
+
+  var onDocumentKeydown = function (evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      console.log(123);
+      closePopupCard();
+    }
   };
 
   var renderMapCard = function (object) {
@@ -91,14 +98,8 @@
       mapCardElement.querySelector('.popup__photos').remove();
     }
 
-    window.onDocumentKeydown = function (evt) {
-      if (evt.keyCode === ESC_KEYCODE) {
-        closePopupCard();
-      }
-    };
-
     mapCardElement.querySelector('.popup__close').addEventListener('click', onPopupCloseClick);
-    window.document.addEventListener('keydown', window.onDocumentKeydown);
+    window.document.addEventListener('keydown', onDocumentKeydown);
 
     return mapCardElement;
   };
