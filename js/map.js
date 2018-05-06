@@ -3,6 +3,7 @@
 (function () {
   var MAP_PIN_WIDTH = 50;
   var MAP_PIN_HEIGHT = 70;
+  var ESC_KEYCODE = 27;
   var templateElement = document.querySelector('template');
   var mapEl = document.querySelector('.map');
   var filterElements = document.querySelectorAll('.map__filters select, .map__filters input');
@@ -31,6 +32,7 @@
   var closePopupCard = function () {
     var openedPopup = document.querySelector('.map__card.popup');
     if (document.body.contains(openedPopup)) {
+      document.removeEventListener('keydown', window.onDocumentKeydown);
       openedPopup.remove();
     }
   };
@@ -89,7 +91,14 @@
       mapCardElement.querySelector('.popup__photos').remove();
     }
 
+    window.onDocumentKeydown = function (evt) {
+      if (evt.keyCode === ESC_KEYCODE) {
+        closePopupCard();
+      }
+    };
+
     mapCardElement.querySelector('.popup__close').addEventListener('click', onPopupCloseClick);
+    window.document.addEventListener('keydown', window.onDocumentKeydown);
 
     return mapCardElement;
   };
