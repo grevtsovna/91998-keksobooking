@@ -43,7 +43,6 @@
 
   var onDocumentKeydown = function (evt) {
     if (evt.keyCode === ESC_KEYCODE) {
-      console.log(123);
       closePopupCard();
     }
   };
