@@ -138,8 +138,17 @@
     window.pin.resetDraggablePin();
   };
 
+  var runFilter = function (objects) {
+    return function () {
+      var filteredObjects = window.filter.filterObjects(objects);
+      removeMapData();
+      closePopupCard();
+      showMapData(filteredObjects);
+    };
+  };
+
   var addFilterEvents = function (objects) {
-    var debouncedFilterObject = window.util.debounce(window.filter.filterObjects, 500);
+    var debouncedFilterObject = window.util.debounce(runFilter, 500);
     Array.from(filterElements).forEach(function (item) {
       item.addEventListener('change', debouncedFilterObject(objects));
     });
@@ -149,8 +158,6 @@
     mapEl: mapEl,
     showMapData: showMapData,
     fadeMap: fadeMap,
-    removeMapData: removeMapData,
-    addFilterEvents: addFilterEvents,
-    closePopupCard: closePopupCard
+    addFilterEvents: addFilterEvents
   };
 })();
