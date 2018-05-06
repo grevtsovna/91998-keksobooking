@@ -3,8 +3,8 @@
 (function () {
   var MAP_MAIN_PIN_SIZE = 65;
   var MAP_MAIN_PIN_ACTIVE_HEIGHT = 87;
-  var MAX_TOP_MAIN_PIN_POSITION = 150;
-  var MAX_BOTTOM_MAIN_PIN_POSITION = 500;
+  var MAX_TOP_MAIN_PIN_POSITION = 150 - MAP_MAIN_PIN_ACTIVE_HEIGHT;
+  var MAX_BOTTOM_MAIN_PIN_POSITION = 500 - MAP_MAIN_PIN_ACTIVE_HEIGHT;
   var draggablePin = document.querySelector('.map__pin--main');
   var draggablePinStartPosition = {
     left: draggablePin.style.left,
