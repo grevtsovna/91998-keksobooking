@@ -85,11 +85,13 @@
 
     var onMouseUp = function () {
       window.form.setAddress(getAddress());
+      pin.style.zIndex = '1';
       document.removeEventListener('mousemove', onMouseMove);
     };
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
+    pin.style.zIndex = '10';
   };
 
   var resetDraggablePin = function () {
