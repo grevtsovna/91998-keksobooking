@@ -149,6 +149,40 @@
     }
   };
 
+  /*var renderImages = function (files) {
+    var fragment = document.createDocumentFragment();
+    var imgTemplate = mainForm.querySelector('.ad-form__photo').cloneNode(true);
+    var imgTag = document.createElement('img');
+    imgTemplate.appendChild(imgTag);
+    Array.from(files).forEach(function (it) {
+      console.log(123);
+      var imgEl = imgTemplate.querySelector('img');
+      window.util.renderImage(it, imgEl);
+      fragment.appendChild(imgTemplate);
+    });
+    console.log(fragment);
+  };*/
+
+  var onImagesChange = function (evt) {
+    var files = evt.target.files;
+    var fragment = document.createDocumentFragment();
+
+    Array.from(files).forEach(function (it) {
+      var imgTag = document.createElement('img');
+      var imgTemplate = mainForm.querySelector('.ad-form__photo').cloneNode(true);
+      imgTemplate.appendChild(imgTag);
+      var reader = new FileReader();
+      reader.addEventListener('load', function (evtLoad) {
+        imgTemplate.querySelector('img').src = evtLoad.target.result;
+        fragment.appendChild(imgTemplate);
+        document.querySelector('.ad-form__photo-container').appendChild(imgTemplate);
+      });
+      reader.readAsDataURL(it);
+    });
+
+    document.querySelector('.ad-form__photo-container').appendChild(fragment);
+  };
+
   disableFormFieldsets();
   submitForm.addEventListener('click', onSubmitButtonClick);
   mainForm.querySelector('#room_number').addEventListener('change', onRoomNumberChange);
@@ -157,6 +191,7 @@
   mainForm.querySelector('#timeout').addEventListener('change', onTimeInputsChange);
   mainForm.querySelector('#type').addEventListener('change', onRoomTypeChange);
   mainForm.querySelector('#avatar').addEventListener('change', onAvatarChange);
+  mainForm.querySelector('#images').addEventListener('change', onImagesChange);
   resetPageButton.addEventListener('click', onResetPageButtonClick);
   mainForm.addEventListener('submit', onMainFormSubmit);
 
