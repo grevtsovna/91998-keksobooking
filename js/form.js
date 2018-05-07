@@ -2,6 +2,7 @@
 
 (function () {
   var PALACE_ROOM_NUMBER = 100;
+  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
   var mainForm = document.querySelector('.ad-form');
   var submitForm = mainForm.querySelector('.ad-form__submit');
   var fieldsets = document.querySelectorAll('.ad-form fieldset');
@@ -136,6 +137,18 @@
     }
   };
 
+  var onAvatarChange = function (evt) {
+    var file = evt.target.files[0];
+    var fileName = file.name.toLowerCase();
+    var avatarEl = mainForm.querySelector('.ad-form-header__preview img');
+    var isValidFile = FILE_TYPES.some(function (it) {
+      return fileName.endsWith(it);
+    });
+    if (isValidFile) {
+      window.util.renderImage(file, avatarEl);
+    }
+  };
+
   disableFormFieldsets();
   submitForm.addEventListener('click', onSubmitButtonClick);
   mainForm.querySelector('#room_number').addEventListener('change', onRoomNumberChange);
@@ -143,6 +156,7 @@
   mainForm.querySelector('#timein').addEventListener('change', onTimeInputsChange);
   mainForm.querySelector('#timeout').addEventListener('change', onTimeInputsChange);
   mainForm.querySelector('#type').addEventListener('change', onRoomTypeChange);
+  mainForm.querySelector('#avatar').addEventListener('change', onAvatarChange);
   resetPageButton.addEventListener('click', onResetPageButtonClick);
   mainForm.addEventListener('submit', onMainFormSubmit);
 

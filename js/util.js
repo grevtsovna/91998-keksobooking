@@ -36,9 +36,19 @@
     };
   };
 
+  var renderImage = function (file, imgElement) {
+    var reader = new FileReader();
+
+    reader.readAsDataURL(file);
+    reader.addEventListener('load', function () {
+      imgElement.src = reader.result;
+    });
+  };
+
   window.util = {
     getElementCoords: getElementCoords,
     showErrors: showErrors,
-    debounce: debounce
+    debounce: debounce,
+    renderImage: renderImage
   };
 })();
