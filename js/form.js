@@ -9,6 +9,7 @@
   var resetPageButton = document.querySelector('.ad-form__reset');
   var priceInput = mainForm.querySelector('#price');
   var addressInput = document.querySelector('#address');
+  var mainFormInputs = mainForm.querySelectorAll('input, select');
   var roomPriceMap = {
     'bungalo': {
       min: '0',
@@ -30,9 +31,9 @@
 
   // Функция, деактивирующая поля формы
   var disableFormFieldsets = function () {
-    for (var i = 0; i < fieldsets.length; i++) {
-      fieldsets[i].setAttribute('disabled', 'disabled');
-    }
+    Array.from(fieldsets).forEach(function (fieldset) {
+      fieldset.setAttribute('disabled', 'disabled');
+    });
   };
 
   var onRoomTypeChange = function (evt) {
@@ -64,18 +65,16 @@
   };
 
   var checkAllInputs = function () {
-    var mainFormInputs = mainForm.querySelectorAll('input, select');
-    for (var i = 0; i < mainFormInputs.length; i++) {
-      var borderStyle = mainFormInputs[i].validity.valid ? '' : '1px solid red';
-      mainFormInputs[i].style.border = borderStyle;
-    }
+    Array.from(mainFormInputs).forEach(function (input) {
+      var borderStyle = input.validity.valid ? '' : '1px solid red';
+      input.style.border = borderStyle;
+    });
   };
 
   var clearValidationStyle = function () {
-    var mainFormInputs = mainForm.querySelectorAll('input, select');
-    for (var i = 0; i < mainFormInputs.length; i++) {
-      mainFormInputs[i].style.border = '';
-    }
+    Array.from(mainFormInputs).forEach(function (input) {
+      input.style.border = '';
+    });
   };
 
   var resetPage = function () {
@@ -83,9 +82,9 @@
     var mapCard = document.querySelector('.map__card');
 
     mainForm.reset();
-    for (var i = 0; i < similarObjectsPins.length; i++) {
-      similarObjectsPins[i].remove();
-    }
+    Array.from(similarObjectsPins).forEach(function (pin) {
+      pin.remove();
+    });
     if (document.contains(mapCard)) {
       mapCard.remove();
     }
@@ -136,9 +135,9 @@
 
   var activateForm = function () {
     mainForm.classList.remove('ad-form--disabled');
-    for (var i = 0; i < fieldsets.length; i++) {
-      fieldsets[i].removeAttribute('disabled');
-    }
+    Array.from(fieldsets).forEach(function (fieldset) {
+      fieldset.removeAttribute('disabled');
+    });
   };
 
   disableFormFieldsets();

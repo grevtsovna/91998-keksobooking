@@ -8,7 +8,6 @@
   var mapEl = document.querySelector('.map');
   var filterElements = document.querySelectorAll('.map__filters select, .map__filters input');
   var mapPinsElement = document.querySelector('.map__pins');
-  var pins = document.querySelectorAll('.map__pins .map__pin:not(.map__pin--main)');
   var offerTypeMap = {
     'flat': 'Квартира',
     'bungalo': 'Бунгало',
@@ -65,35 +64,35 @@
     mapCardElement.querySelector('.popup__avatar').src = object.author.avatar;
 
     // Скрываем все "удобства"
-    for (var i = 0; i < features.length; i++) {
-      features[i].style.display = 'none';
-    }
+    Array.from(features).forEach(function (feature) {
+      feature.style.display = 'none';
+    });
 
     // Отображаем нужные "удобства"
-    for (i = 0; i < offer.features.length; i++) {
-      var featureClass = '.popup__feature--' + offer.features[i];
+    offer.features.forEach(function (feature) {
+      var featureClass = '.popup__feature--' + feature;
       mapCardElement.querySelector(featureClass).style.display = 'inline-block';
-    }
+    });
 
     if (offer.features.length === 0) {
       mapCardElement.querySelector('.popup__features').remove();
     }
 
-    for (i = 0; i < offer.photos.length; i++) {
+    offer.photos.forEach(function (item, i) {
       if (i === 0) {
-        mapCardElement.querySelector('.popup__photos img').src = offer.photos[i];
-        continue;
+        mapCardElement.querySelector('.popup__photos img').src = item;
+        return;
       }
 
       var photo = document.createElement('img');
-      photo.src = offer.photos[i];
+      photo.src = item;
       photo.alt = 'Фотография жилья';
       photo.width = 45;
       photo.height = 40;
       photo.classList.add('popup__photo');
 
       mapCardElement.querySelector('.popup__photos').appendChild(photo);
-    }
+    });
 
     if (offer.photos.length === 0) {
       mapCardElement.querySelector('.popup__photos').remove();
@@ -128,6 +127,7 @@
   };
 
   var removeMapData = function () {
+    var pins = document.querySelectorAll('.map__pins .map__pin:not(.map__pin--main)');
     Array.from(pins).forEach(function (item) {
       item.remove();
     });

@@ -76,7 +76,7 @@
     return objects.filter(compareWithFilter(filterData));
   };
 
-  var resetFilters = function() {
+  var resetFilters = function () {
     filterFormEl.reset();
   };
 
