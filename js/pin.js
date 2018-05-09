@@ -24,7 +24,7 @@
     var coordX = parseFloat(mainPin.style.left) + offsetX;
     var coordY = parseFloat(mainPin.style.top) + offsetY;
 
-    return coordX + ', ' + coordY;
+    return Math.round(coordX) + ', ' + Math.round(coordY);
   };
 
   var onDraggablePinMouseUp = function (evt) {
