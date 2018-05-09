@@ -2,6 +2,7 @@
 
 (function () {
   var PALACE_ROOM_NUMBER = 100;
+  var SUCCESS_MESSAGE_TIMEOUT = 3000;
   var mainForm = document.querySelector('.ad-form');
   var submitForm = mainForm.querySelector('.ad-form__submit');
   var fieldsets = document.querySelectorAll('.ad-form fieldset');
@@ -102,7 +103,7 @@
     resetPage();
     setTimeout(function () {
       successEl.classList.add('hidden');
-    }, 3000);
+    }, SUCCESS_MESSAGE_TIMEOUT);
   };
 
   var onMainFormSubmit = function (evt) {
