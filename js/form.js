@@ -8,6 +8,7 @@
   var fieldsets = document.querySelectorAll('.ad-form fieldset');
   var resetPageButton = document.querySelector('.ad-form__reset');
   var priceInput = mainForm.querySelector('#price');
+  var addressInput = document.querySelector('#address');
   var roomPriceMap = {
     'bungalo': {
       min: '0',
@@ -130,7 +131,7 @@
   };
 
   var setAddress = function (address) {
-    document.querySelector('#address').value = address;
+    addressInput.value = address;
   };
 
   var activateForm = function () {
