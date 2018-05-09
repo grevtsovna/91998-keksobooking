@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
   var getElementCoords = function (element) {
     var coords = element.getBoundingClientRect();
@@ -14,7 +15,7 @@
 
   var showErrors = function (error) {
     var errorEl = document.createElement('div');
-    errorEl.style.cssText = 'position: fixed; top: 0; left: 0; background: #ed5d50; color: #fff; padding: 10px; width: 100%';
+    errorEl.style.cssText = 'position: fixed; top: 0; left: 0; background: #ed5d50; color: #fff; padding: 10px; width: 100%; z-index: 100;';
     errorEl.textContent = error;
     document.querySelector('body').appendChild(errorEl);
     setTimeout(function () {
@@ -36,12 +37,10 @@
     };
   };
 
-  var renderImage = function (file, imgElement) {
-    var reader = new FileReader();
-
-    reader.readAsDataURL(file);
-    reader.addEventListener('load', function () {
-      imgElement.src = reader.result;
+  var chekImage = function (file) {
+    var fileName = file.name.toLowerCase();
+    return FILE_TYPES.some(function (it) {
+      return fileName.endsWith(it);
     });
   };
 
@@ -49,6 +48,6 @@
     getElementCoords: getElementCoords,
     showErrors: showErrors,
     debounce: debounce,
-    renderImage: renderImage
+    checkImage: chekImage
   };
 })();

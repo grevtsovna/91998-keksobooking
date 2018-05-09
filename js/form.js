@@ -2,11 +2,13 @@
 
 (function () {
   var PALACE_ROOM_NUMBER = 100;
-  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  var DEFAULT_AVATAR = 'img/muffin-grey.svg';
   var mainForm = document.querySelector('.ad-form');
   var submitForm = mainForm.querySelector('.ad-form__submit');
   var fieldsets = document.querySelectorAll('.ad-form fieldset');
   var resetPageButton = document.querySelector('.ad-form__reset');
+  var imagesContainer = document.querySelector('.ad-form__photo-container');
+  var avatarEl = mainForm.querySelector('.ad-form-header__preview img');
   var roomPriceMap = {
     'bungalo': {
       min: '0',
@@ -89,6 +91,8 @@
       mapCard.remove();
     }
     window.map.fadeMap();
+    resetImages();
+    resetAvatar();
     clearValidationStyle();
     disableFormFieldsets();
     mainForm.classList.add('ad-form--disabled');
@@ -139,29 +143,16 @@
 
   var onAvatarChange = function (evt) {
     var file = evt.target.files[0];
-    var fileName = file.name.toLowerCase();
-    var avatarEl = mainForm.querySelector('.ad-form-header__preview img');
-    var isValidFile = FILE_TYPES.some(function (it) {
-      return fileName.endsWith(it);
-    });
-    if (isValidFile) {
-      window.util.renderImage(file, avatarEl);
+    if (!window.util.checkImage(file)) {
+      window.util.showErrors('Пожалуйста, выберете изображение!');
+    } else {
+      var reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.addEventListener('load', function () {
+        avatarEl.src = reader.result;
+      });
     }
   };
-
-  /*var renderImages = function (files) {
-    var fragment = document.createDocumentFragment();
-    var imgTemplate = mainForm.querySelector('.ad-form__photo').cloneNode(true);
-    var imgTag = document.createElement('img');
-    imgTemplate.appendChild(imgTag);
-    Array.from(files).forEach(function (it) {
-      console.log(123);
-      var imgEl = imgTemplate.querySelector('img');
-      window.util.renderImage(it, imgEl);
-      fragment.appendChild(imgTemplate);
-    });
-    console.log(fragment);
-  };*/
 
   var createImageElement = function (imgData) {
     var wrapper = document.createElement('div');
@@ -188,13 +179,26 @@
     removeImages();
 
     Array.from(files).forEach(function (it) {
-      var reader = new FileReader();
-      reader.addEventListener('load', function () {
-        var img = createImageElement(reader.result);
-        document.querySelector('.ad-form__photo-container').appendChild(img);
-      });
-      reader.readAsDataURL(it);
+      if (window.util.checkImage(it)) {
+        var reader = new FileReader();
+        reader.addEventListener('load', function () {
+          var img = createImageElement(reader.result);
+          imagesContainer.appendChild(img);
+        });
+        reader.readAsDataURL(it);
+      }
     });
+  };
+
+  var resetImages = function () {
+    removeImages();
+    var emptyImgWrapper = document.createElement('div');
+    emptyImgWrapper.classList.add('ad-form__photo');
+    imagesContainer.appendChild(emptyImgWrapper);
+  };
+
+  var resetAvatar = function () {
+    avatarEl.src = DEFAULT_AVATAR;
   };
 
   disableFormFieldsets();
@@ -208,6 +212,8 @@
   mainForm.querySelector('#images').addEventListener('change', onImagesChange);
   resetPageButton.addEventListener('click', onResetPageButtonClick);
   mainForm.addEventListener('submit', onMainFormSubmit);
+
+
 
   window.form = {
     activateForm: activateForm,
