@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var filterFormEl = document.querySelector('.map__filters');
   var pricesMap = {
     low: {
       min: 0,
@@ -59,7 +60,6 @@
 
   // фунция, фильтрующая объекты недвижимости
   var filterObjects = function (objects) {
-    var filterFormEl = document.querySelector('.map__filters');
     var filterSelects = filterFormEl.querySelectorAll('select');
     var checkedFeatureInputs = filterFormEl.querySelectorAll('.map__features input:checked');
     var checkedFeatures = Array.from(checkedFeatureInputs).map(function (item) {
@@ -76,7 +76,12 @@
     return objects.filter(compareWithFilter(filterData));
   };
 
+  var resetFilters = function() {
+    filterFormEl.reset();
+  };
+
   window.filter = {
-    filterObjects: filterObjects
+    filterObjects: filterObjects,
+    resetFilters: resetFilters
   };
 })();

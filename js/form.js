@@ -88,6 +88,7 @@
       mapCard.remove();
     }
     window.map.fadeMap();
+    window.filter.resetFilters();
     clearValidationStyle();
     disableFormFieldsets();
     mainForm.classList.add('ad-form--disabled');
