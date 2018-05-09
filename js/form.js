@@ -6,6 +6,7 @@
   var submitForm = mainForm.querySelector('.ad-form__submit');
   var fieldsets = document.querySelectorAll('.ad-form fieldset');
   var resetPageButton = document.querySelector('.ad-form__reset');
+  var priceInput = mainForm.querySelector('#price');
   var roomPriceMap = {
     'bungalo': {
       min: '0',
@@ -33,7 +34,6 @@
   };
 
   var onRoomTypeChange = function (evt) {
-    var priceInput = mainForm.querySelector('#price');
     var roomType = evt.target.value;
 
     priceInput.min = roomPriceMap[roomType].min;
@@ -87,6 +87,8 @@
     if (document.contains(mapCard)) {
       mapCard.remove();
     }
+    priceInput.min = roomPriceMap['flat'].min;
+    priceInput.placeholder = roomPriceMap['flat'].placeholder;
     window.map.fadeMap();
     window.filter.resetFilters();
     clearValidationStyle();
