@@ -2,11 +2,19 @@
 
 (function () {
   var PALACE_ROOM_NUMBER = 100;
+  var SUCCESS_MESSAGE_TIMEOUT = 3000;
   var DEFAULT_AVATAR = 'img/muffin-grey.svg';
   var mainForm = document.querySelector('.ad-form');
   var submitForm = mainForm.querySelector('.ad-form__submit');
   var fieldsets = document.querySelectorAll('.ad-form fieldset');
   var resetPageButton = document.querySelector('.ad-form__reset');
+  var priceInput = mainForm.querySelector('#price');
+  var addressInput = document.querySelector('#address');
+  var mainFormInputs = mainForm.querySelectorAll('input, select');
+  var capacityEl = mainForm.querySelector('#capacity');
+  var roomNumberEl = mainForm.querySelector('#room_number');
+  var timeOutEl = mainForm.querySelector('#timeout');
+  var timeInEl = mainForm.querySelector('#timein');
   var imagesContainer = document.querySelector('.ad-form__photo-container');
   var avatarEl = mainForm.querySelector('.ad-form-header__preview img');
   var imagesWrapper = mainForm.querySelector('.ad-form__photo-container');
@@ -33,13 +41,12 @@
 
   // Функция, деактивирующая поля формы
   var disableFormFieldsets = function () {
-    for (var i = 0; i < fieldsets.length; i++) {
-      fieldsets[i].setAttribute('disabled', 'disabled');
-    }
+    Array.from(fieldsets).forEach(function (fieldset) {
+      fieldset.setAttribute('disabled', 'disabled');
+    });
   };
 
   var onRoomTypeChange = function (evt) {
-    var priceInput = mainForm.querySelector('#price');
     var roomType = evt.target.value;
 
     priceInput.min = roomPriceMap[roomType].min;
@@ -47,13 +54,11 @@
   };
 
   var onTimeInputsChange = function (evt) {
-    var selector = (evt.currentTarget.id === 'timein') ? '#timeout' : '#timein';
-    mainForm.querySelector(selector).value = evt.currentTarget.value;
+    var inputEl = (evt.currentTarget.id === 'timein') ? timeOutEl : timeInEl;
+    inputEl.value = evt.currentTarget.value;
   };
 
   var validateRoomNumber = function () {
-    var capacityEl = mainForm.querySelector('#capacity');
-    var roomNumberEl = mainForm.querySelector('#room_number');
     var capacityValue = parseInt(capacityEl.value, 10);
     var roomNumberValue = parseInt(roomNumberEl.value, 10);
     var validityMessage = '';
@@ -68,18 +73,16 @@
   };
 
   var checkAllInputs = function () {
-    var mainFormInputs = mainForm.querySelectorAll('input, select');
-    for (var i = 0; i < mainFormInputs.length; i++) {
-      var borderStyle = mainFormInputs[i].validity.valid ? '' : '1px solid red';
-      mainFormInputs[i].style.border = borderStyle;
-    }
+    Array.from(mainFormInputs).forEach(function (input) {
+      var borderStyle = input.validity.valid ? '' : '1px solid red';
+      input.style.border = borderStyle;
+    });
   };
 
   var clearValidationStyle = function () {
-    var mainFormInputs = mainForm.querySelectorAll('input, select');
-    for (var i = 0; i < mainFormInputs.length; i++) {
-      mainFormInputs[i].style.border = '';
-    }
+    Array.from(mainFormInputs).forEach(function (input) {
+      input.style.border = '';
+    });
   };
 
   var resetPage = function () {
@@ -87,13 +90,16 @@
     var mapCard = document.querySelector('.map__card');
 
     mainForm.reset();
-    for (var i = 0; i < similarObjectsPins.length; i++) {
-      similarObjectsPins[i].remove();
-    }
+    Array.from(similarObjectsPins).forEach(function (pin) {
+      pin.remove();
+    });
     if (document.contains(mapCard)) {
       mapCard.remove();
     }
+    priceInput.min = roomPriceMap['flat'].min;
+    priceInput.placeholder = roomPriceMap['flat'].placeholder;
     window.map.fadeMap();
+    window.filter.resetFilters();
     resetImages();
     resetAvatar();
     clearValidationStyle();
@@ -107,7 +113,7 @@
     resetPage();
     setTimeout(function () {
       successEl.classList.add('hidden');
-    }, 3000);
+    }, SUCCESS_MESSAGE_TIMEOUT);
   };
 
   var onMainFormSubmit = function (evt) {
@@ -134,14 +140,14 @@
   };
 
   var setAddress = function (address) {
-    document.querySelector('#address').value = address;
+    addressInput.value = address;
   };
 
   var activateForm = function () {
     mainForm.classList.remove('ad-form--disabled');
-    for (var i = 0; i < fieldsets.length; i++) {
-      fieldsets[i].removeAttribute('disabled');
-    }
+    Array.from(fieldsets).forEach(function (fieldset) {
+      fieldset.removeAttribute('disabled');
+    });
   };
 
   var onAvatarChange = function (evt) {
