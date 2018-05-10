@@ -175,7 +175,7 @@
   var removeImages = function () {
     var images = imagesWrapper.querySelectorAll('.ad-form__photo');
 
-    imagesWrapper.querySelector('#images').val = '';
+    imagesWrapper.querySelector('#images').value = '';
     Array.from(images).forEach(function (it) {
       it.remove();
     });
