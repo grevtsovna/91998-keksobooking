@@ -181,7 +181,6 @@
   var removeImages = function () {
     var images = imagesWrapper.querySelectorAll('.ad-form__photo');
 
-    imagesWrapper.querySelector('#images').value = '';
     Array.from(images).forEach(function (it) {
       it.remove();
     });
@@ -205,6 +204,7 @@
 
   var resetImages = function () {
     removeImages();
+    imagesWrapper.querySelector('#images').value = '';
     var emptyImgWrapper = document.createElement('div');
     emptyImgWrapper.classList.add('ad-form__photo');
     imagesContainer.appendChild(emptyImgWrapper);
