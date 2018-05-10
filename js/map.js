@@ -6,7 +6,8 @@
   var ESC_KEYCODE = 27;
   var templateElement = document.querySelector('template');
   var mapEl = document.querySelector('.map');
-  var filterElements = document.querySelectorAll('.map__filters select, .map__filters input');
+  var mapFiltersEl = document.querySelector('.map__filters');
+  var filterElements = mapFiltersEl.querySelectorAll('select, input');
   var mapPinsElement = document.querySelector('.map__pins');
   var offerTypeMap = {
     'flat': 'Квартира',
@@ -127,7 +128,7 @@
   };
 
   var removeMapData = function () {
-    var pins = document.querySelectorAll('.map__pins .map__pin:not(.map__pin--main)');
+    var pins = mapPinsElement.querySelectorAll('.map__pin:not(.map__pin--main)');
     Array.from(pins).forEach(function (item) {
       item.remove();
     });
