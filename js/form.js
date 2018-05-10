@@ -10,6 +10,10 @@
   var priceInput = mainForm.querySelector('#price');
   var addressInput = document.querySelector('#address');
   var mainFormInputs = mainForm.querySelectorAll('input, select');
+  var capacityEl = mainForm.querySelector('#capacity');
+  var roomNumberEl = mainForm.querySelector('#room_number');
+  var timeOutEl = mainForm.querySelector('#timeout');
+  var timeInEl = mainForm.querySelector('#timein');
   var roomPriceMap = {
     'bungalo': {
       min: '0',
@@ -44,13 +48,11 @@
   };
 
   var onTimeInputsChange = function (evt) {
-    var selector = (evt.currentTarget.id === 'timein') ? '#timeout' : '#timein';
-    mainForm.querySelector(selector).value = evt.currentTarget.value;
+    var inputEl = (evt.currentTarget.id === 'timein') ? timeOutEl : timeInEl;
+    inputEl.value = evt.currentTarget.value;
   };
 
   var validateRoomNumber = function () {
-    var capacityEl = mainForm.querySelector('#capacity');
-    var roomNumberEl = mainForm.querySelector('#room_number');
     var capacityValue = parseInt(capacityEl.value, 10);
     var roomNumberValue = parseInt(roomNumberEl.value, 10);
     var validityMessage = '';
