@@ -9,6 +9,7 @@
   var resetPageButton = document.querySelector('.ad-form__reset');
   var imagesContainer = document.querySelector('.ad-form__photo-container');
   var avatarEl = mainForm.querySelector('.ad-form-header__preview img');
+  var imagesWrapper = mainForm.querySelector('.ad-form__photo-container');
   var draggedItem = null;
   var draggedFromElement = null;
   var roomPriceMap = {
@@ -172,9 +173,9 @@
   };
 
   var removeImages = function () {
-    var images = document.querySelectorAll('.ad-form__photo-container .ad-form__photo');
+    var images = imagesWrapper.querySelectorAll('.ad-form__photo');
 
-    document.querySelector('#images').val = '';
+    imagesWrapper.querySelector('#images').val = '';
     Array.from(images).forEach(function (it) {
       it.remove();
     });
