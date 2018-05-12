@@ -136,7 +136,7 @@
 
   var fadeMap = function () {
     mapElement.classList.add('map--faded');
-    window.pin.resetDraggablePin();
+    window.pin.resetDraggable();
   };
 
   var applyFilters = function (objects) {

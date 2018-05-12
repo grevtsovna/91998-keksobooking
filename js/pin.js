@@ -109,6 +109,6 @@
   window.form.setAddress(getAddress());
 
   window.pin = {
-    resetDraggablePin: resetDraggablePin
+    resetDraggable: resetDraggablePin
   };
 })();
