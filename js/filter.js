@@ -68,9 +68,9 @@
       return item.value;
     });
 
-    var filterData = Array.from(filterSelects).reduce(function (acc, val) {
-      acc[val.name] = val.value;
-      return acc;
+    var filterData = Array.from(filterSelects).reduce(function (accumulatedObject, currentSelect) {
+      accumulatedObject[currentSelect.name] = currentSelect.value;
+      return accumulatedObject;
     }, {});
 
     filterData.features = checkedFeatures;
