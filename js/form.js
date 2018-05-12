@@ -74,8 +74,7 @@
 
   var checkAllInputs = function () {
     Array.from(mainFormInputs).forEach(function (input) {
-      var borderStyle = input.validity.valid ? '' : '1px solid red';
-      input.style.border = borderStyle;
+      input.style.border = input.validity.valid ? '' : '1px solid red';
     });
   };
 
