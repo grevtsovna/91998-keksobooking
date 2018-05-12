@@ -148,10 +148,18 @@
     };
   };
 
+  var getPinsContainerParameters = function () {
+    return {
+      pinsContainerWidth: mapPinsElement.offsetWidth,
+      pinsContainerCoordinates: window.util.getElementCoordinates(mapPinsElement)
+    };
+  };
+
   window.map = {
     wrapper: mapElement,
     showData: showMapData,
     fade: fadeMap,
-    applyFilters: applyFilters
+    applyFilters: applyFilters,
+    getPinsContainerParameters: getPinsContainerParameters
   };
 })();
