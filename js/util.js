@@ -2,33 +2,34 @@
 
 (function () {
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  var ERROR_MESSAGE_TIMEOUT = 5000;
 
-  var getElementCoords = function (element) {
-    var coords = element.getBoundingClientRect();
+  var getElementCoordinates = function (element) {
+    var coordinates = element.getBoundingClientRect();
 
     return {
-      top: coords.top - pageYOffset,
-      left: coords.left - pageXOffset,
-      right: coords.left - pageXOffset + element.offsetWidth
+      top: coordinates.top - pageYOffset,
+      left: coordinates.left - pageXOffset,
+      right: coordinates.left - pageXOffset + element.offsetWidth
     };
   };
 
   var showErrors = function (error) {
-    var errorEl = document.createElement('div');
-    errorEl.style.cssText = 'position: fixed; top: 0; left: 0; background: #ed5d50; color: #fff; padding: 10px; width: 100%; z-index: 100;';
-    errorEl.textContent = error;
-    document.querySelector('body').appendChild(errorEl);
+    var errorElement = document.createElement('div');
+    errorElement.style.cssText = 'position: fixed; top: 0; left: 0; background: #ed5d50; color: #fff; padding: 10px; width: 100%; z-index: 100;';
+    errorElement.textContent = error;
+    document.querySelector('body').appendChild(errorElement);
     setTimeout(function () {
-      errorEl.remove();
-    }, 5000);
+      errorElement.remove();
+    }, ERROR_MESSAGE_TIMEOUT);
   };
 
-  var debounce = function (func, debouncePeriod) {
+  var debounce = function (debouncedFunction, debouncePeriod) {
     var lastTimeout;
     return function () {
-      var _args = arguments;
+      var _receivedArguments = arguments;
       var callFunc = function () {
-        func.apply(null, _args);
+        debouncedFunction.apply(null, _receivedArguments);
       };
       if (lastTimeout) {
         clearTimeout(lastTimeout);
@@ -37,17 +38,17 @@
     };
   };
 
-  var chekImage = function (file) {
+  var checkImage = function (file) {
     var fileName = file.name.toLowerCase();
-    return FILE_TYPES.some(function (it) {
-      return fileName.endsWith(it);
+    return FILE_TYPES.some(function (type) {
+      return fileName.endsWith(type);
     });
   };
 
   window.util = {
-    getElementCoords: getElementCoords,
+    getElementCoordinates: getElementCoordinates,
     showErrors: showErrors,
     debounce: debounce,
-    checkImage: chekImage
+    checkImage: checkImage
   };
 })();

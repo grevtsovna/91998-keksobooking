@@ -41,7 +41,7 @@
     var pin = evt.currentTarget;
     var pinContainer = document.querySelector('.map__pins');
     var pinContainerWidth = pinContainer.offsetWidth;
-    var pinContainerCoords = window.util.getElementCoords(pinContainer);
+    var pinContainerCoords = window.util.getElementCoordinates(pinContainer);
     var start = {
       x: evt.clientX,
       y: evt.clientY

@@ -5,7 +5,7 @@
   var MAP_PIN_HEIGHT = 70;
   var ESC_KEYCODE = 27;
   var MAX_DISPLAYED_PINS = 5;
-  var DEBOUNCE_VALUE = 500;
+  var DEBOUNCE_PERIOD = 500;
   var templateElement = document.querySelector('template');
   var mapElement = document.querySelector('.map');
   var mapFiltersElement = mapElement.querySelector('.map__filters');
@@ -152,7 +152,7 @@
   };
 
   var addFilterEvents = function (objects) {
-    var debouncedFilterObject = window.util.debounce(runFilter(objects), DEBOUNCE_VALUE);
+    var debouncedFilterObject = window.util.debounce(runFilter(objects), DEBOUNCE_PERIOD);
     Array.from(filterElements).forEach(function (filter) {
       filter.addEventListener('change', debouncedFilterObject);
     });
