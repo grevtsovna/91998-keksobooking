@@ -99,7 +99,7 @@
     priceInput.min = roomPriceMap['flat'].min;
     priceInput.placeholder = roomPriceMap['flat'].placeholder;
     window.map.fade();
-    window.filter.resetFilters();
+    window.filter.reset();
     resetImages();
     resetAvatar();
     clearValidationStyle();

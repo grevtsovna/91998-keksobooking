@@ -91,7 +91,7 @@
 
   window.filter = {
     getFilteredObjects: filterObjects,
-    resetFilters: resetFilters,
+    reset: resetFilters,
     addEvents: addFilterEvents
   };
 })();
