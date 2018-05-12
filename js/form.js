@@ -42,7 +42,7 @@
   // Функция, деактивирующая поля формы
   var disableFormFieldsets = function () {
     Array.from(fieldsets).forEach(function (fieldset) {
-      fieldset.setAttribute('disabled', 'disabled');
+      fieldset.disabled = true;
     });
   };
 
