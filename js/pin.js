@@ -30,7 +30,7 @@
   var onDraggablePinMouseUp = function (evt) {
     var onSuccessLoad = function (objects) {
       window.map.showData(objects);
-      window.map.addFilterEvents(objects);
+      window.filter.addEvents(objects);
     };
     window.backend.loadData(onSuccessLoad, window.util.showErrors);
     window.form.activate();

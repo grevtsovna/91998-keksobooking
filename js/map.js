@@ -5,11 +5,8 @@
   var MAP_PIN_HEIGHT = 70;
   var ESC_KEYCODE = 27;
   var MAX_DISPLAYED_PINS = 5;
-  var DEBOUNCE_PERIOD = 500;
   var templateElement = document.querySelector('template');
   var mapElement = document.querySelector('.map');
-  var mapFiltersElement = mapElement.querySelector('.map__filters');
-  var filterElements = mapFiltersElement.querySelectorAll('select, input');
   var mapPinsElement = mapElement.querySelector('.map__pins');
   var offerTypeMap = {
     'flat': 'Квартира',
@@ -142,7 +139,7 @@
     window.pin.resetDraggablePin();
   };
 
-  var runFilter = function (objects) {
+  var applyFilters = function (objects) {
     return function () {
       var filteredObjects = window.filter.filterObjects(objects);
       removeMapData();
@@ -151,17 +148,10 @@
     };
   };
 
-  var addFilterEvents = function (objects) {
-    var debouncedFilterObject = window.util.debounce(runFilter(objects), DEBOUNCE_PERIOD);
-    Array.from(filterElements).forEach(function (filter) {
-      filter.addEventListener('change', debouncedFilterObject);
-    });
-  };
-
   window.map = {
     wrapper: mapElement,
     showData: showMapData,
     fade: fadeMap,
-    addFilterEvents: addFilterEvents
+    applyFilters: applyFilters
   };
 })();

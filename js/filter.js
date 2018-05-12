@@ -1,7 +1,9 @@
 'use strict';
 
 (function () {
-  var filterFormEl = document.querySelector('.map__filters');
+  var DEBOUNCE_PERIOD = 500;
+  var mapFiltersElement = window.map.wrapper.querySelector('.map__filters');
+  var filterElements = mapFiltersElement.querySelectorAll('select, input');
   var pricesMap = {
     low: {
       min: 0,
@@ -60,8 +62,8 @@
 
   // фунция, фильтрующая объекты недвижимости
   var filterObjects = function (objects) {
-    var filterSelects = filterFormEl.querySelectorAll('select');
-    var checkedFeatureInputs = filterFormEl.querySelectorAll('.map__features input:checked');
+    var filterSelects = mapFiltersElement.querySelectorAll('select');
+    var checkedFeatureInputs = mapFiltersElement.querySelectorAll('.map__features input:checked');
     var checkedFeatures = Array.from(checkedFeatureInputs).map(function (item) {
       return item.value;
     });
@@ -77,11 +79,19 @@
   };
 
   var resetFilters = function () {
-    filterFormEl.reset();
+    mapFiltersElement.reset();
+  };
+
+  var addFilterEvents = function (objects) {
+    var debouncedFilterObject = window.util.debounce(window.map.applyFilters(objects), DEBOUNCE_PERIOD);
+    Array.from(filterElements).forEach(function (filter) {
+      filter.addEventListener('change', debouncedFilterObject);
+    });
   };
 
   window.filter = {
     filterObjects: filterObjects,
-    resetFilters: resetFilters
+    resetFilters: resetFilters,
+    addEvents: addFilterEvents
   };
 })();
