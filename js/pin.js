@@ -16,7 +16,7 @@
     var offsetX = MAP_MAIN_PIN_SIZE / 2;
     var offsetY;
 
-    if (window.map.mapEl.classList.contains('map--faded')) {
+    if (window.map.wrapper.classList.contains('map--faded')) {
       offsetY = MAP_MAIN_PIN_SIZE / 2;
     } else {
       offsetY = MAP_MAIN_PIN_ACTIVE_HEIGHT;
@@ -29,7 +29,7 @@
 
   var onDraggablePinMouseUp = function (evt) {
     var onSuccessLoad = function (objects) {
-      window.map.showMapData(objects);
+      window.map.showData(objects);
       window.map.addFilterEvents(objects);
     };
     window.backend.loadData(onSuccessLoad, window.util.showErrors);

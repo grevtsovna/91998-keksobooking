@@ -6,16 +6,16 @@
   var DEFAULT_AVATAR = 'img/muffin-grey.svg';
   var mainForm = document.querySelector('.ad-form');
   var submitForm = mainForm.querySelector('.ad-form__submit');
-  var fieldsets = document.querySelectorAll('.ad-form fieldset');
-  var resetPageButton = document.querySelector('.ad-form__reset');
+  var fieldsets = mainForm.querySelectorAll('fieldset');
+  var resetPageButton = mainForm.querySelector('.ad-form__reset');
   var priceInput = mainForm.querySelector('#price');
-  var addressInput = document.querySelector('#address');
+  var addressInput = mainForm.querySelector('#address');
   var mainFormInputs = mainForm.querySelectorAll('input, select');
   var capacityElement = mainForm.querySelector('#capacity');
   var roomNumberElement = mainForm.querySelector('#room_number');
   var timeOutElement = mainForm.querySelector('#timeout');
   var timeInElement = mainForm.querySelector('#timein');
-  var imagesContainer = document.querySelector('.ad-form__photo-container');
+  var imagesContainer = mainForm.querySelector('.ad-form__photo-container');
   var avatarElement = mainForm.querySelector('.ad-form-header__preview img');
   var imagesWrapper = mainForm.querySelector('.ad-form__photo-container');
   var draggedItem = null;
@@ -98,7 +98,7 @@
     }
     priceInput.min = roomPriceMap['flat'].min;
     priceInput.placeholder = roomPriceMap['flat'].placeholder;
-    window.map.fadeMap();
+    window.map.fade();
     window.filter.resetFilters();
     resetImages();
     resetAvatar();

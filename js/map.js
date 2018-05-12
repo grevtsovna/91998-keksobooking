@@ -4,11 +4,13 @@
   var MAP_PIN_WIDTH = 50;
   var MAP_PIN_HEIGHT = 70;
   var ESC_KEYCODE = 27;
+  var MAX_DISPLAYED_PINS = 5;
+  var DEBOUNCE_VALUE = 500;
   var templateElement = document.querySelector('template');
-  var mapEl = document.querySelector('.map');
-  var mapFiltersEl = document.querySelector('.map__filters');
-  var filterElements = mapFiltersEl.querySelectorAll('select, input');
-  var mapPinsElement = document.querySelector('.map__pins');
+  var mapElement = document.querySelector('.map');
+  var mapFiltersElement = mapElement.querySelector('.map__filters');
+  var filterElements = mapFiltersElement.querySelectorAll('select, input');
+  var mapPinsElement = mapElement.querySelector('.map__pins');
   var offerTypeMap = {
     'flat': 'Квартира',
     'bungalo': 'Бунгало',
@@ -20,11 +22,11 @@
     var mapPinTemplate = templateElement.content.querySelector('.map__pin');
     var mapPinElement = mapPinTemplate.cloneNode(true);
     var mapPinImageElement = mapPinElement.querySelector('img');
-    var coordX = object.location.x - MAP_PIN_WIDTH / 2;
-    var coordY = object.location.y - MAP_PIN_HEIGHT;
+    var coordinateX = object.location.x - MAP_PIN_WIDTH / 2;
+    var coordinateY = object.location.y - MAP_PIN_HEIGHT;
 
-    mapPinElement.style.left = coordX + 'px';
-    mapPinElement.style.top = coordY + 'px';
+    mapPinElement.style.left = coordinateX + 'px';
+    mapPinElement.style.top = coordinateY + 'px';
     mapPinImageElement.src = object.author.avatar;
     mapPinImageElement.alt = object.offer.title;
 
@@ -32,7 +34,7 @@
   };
 
   var closePopupCard = function () {
-    var openedPopup = document.querySelector('.map__card.popup');
+    var openedPopup = mapElement.querySelector('.map__card.popup');
     if (document.body.contains(openedPopup)) {
       document.removeEventListener('keydown', onDocumentKeydown);
       openedPopup.remove();
@@ -54,6 +56,7 @@
     var offer = object.offer;
     var type = offerTypeMap[offer.type];
     var features = mapCardElement.querySelectorAll('.popup__feature');
+    var popupPhotosWrapper = mapCardElement.querySelector('.popup__photos');
 
     mapCardElement.querySelector('.popup__title').textContent = offer.title;
     mapCardElement.querySelector('.popup__text--address').textContent = offer.address;
@@ -79,24 +82,24 @@
       mapCardElement.querySelector('.popup__features').remove();
     }
 
-    offer.photos.forEach(function (item, i) {
+    offer.photos.forEach(function (photo, i) {
       if (i === 0) {
-        mapCardElement.querySelector('.popup__photos img').src = item;
+        popupPhotosWrapper.querySelector('img').src = photo;
         return;
       }
 
-      var photo = document.createElement('img');
-      photo.src = item;
-      photo.alt = 'Фотография жилья';
-      photo.width = 45;
-      photo.height = 40;
-      photo.classList.add('popup__photo');
+      var image = document.createElement('img');
+      image.src = photo;
+      image.alt = 'Фотография жилья';
+      image.width = 45;
+      image.height = 40;
+      image.classList.add('popup__photo');
 
-      mapCardElement.querySelector('.popup__photos').appendChild(photo);
+      popupPhotosWrapper.appendChild(image);
     });
 
     if (offer.photos.length === 0) {
-      mapCardElement.querySelector('.popup__photos').remove();
+      popupPhotosWrapper.remove();
     }
 
     mapCardElement.querySelector('.popup__close').addEventListener('click', onPopupCloseClick);
@@ -109,14 +112,14 @@
     return function () {
       closePopupCard();
       var mapCard = renderMapCard(object);
-      document.querySelector('.map__filters-container').insertAdjacentElement('beforebegin', mapCard);
+      mapElement.querySelector('.map__filters-container').insertAdjacentElement('beforebegin', mapCard);
     };
   };
 
   var showMapData = function (objects) {
-    var limitedObjects = objects.slice(0, 5);
+    var limitedObjects = objects.slice(0, MAX_DISPLAYED_PINS);
     var fragment = document.createDocumentFragment();
-    mapEl.classList.remove('map--faded');
+    mapElement.classList.remove('map--faded');
 
     limitedObjects.forEach(function (object) {
       var mapPin = renderMapPin(object);
@@ -129,13 +132,13 @@
 
   var removeMapData = function () {
     var pins = mapPinsElement.querySelectorAll('.map__pin:not(.map__pin--main)');
-    Array.from(pins).forEach(function (item) {
-      item.remove();
+    Array.from(pins).forEach(function (pin) {
+      pin.remove();
     });
   };
 
   var fadeMap = function () {
-    window.map.mapEl.classList.add('map--faded');
+    mapElement.classList.add('map--faded');
     window.pin.resetDraggablePin();
   };
 
@@ -149,16 +152,16 @@
   };
 
   var addFilterEvents = function (objects) {
-    var debouncedFilterObject = window.util.debounce(runFilter(objects), 500);
-    Array.from(filterElements).forEach(function (item) {
-      item.addEventListener('change', debouncedFilterObject);
+    var debouncedFilterObject = window.util.debounce(runFilter(objects), DEBOUNCE_VALUE);
+    Array.from(filterElements).forEach(function (filter) {
+      filter.addEventListener('change', debouncedFilterObject);
     });
   };
 
   window.map = {
-    mapEl: mapEl,
-    showMapData: showMapData,
-    fadeMap: fadeMap,
+    wrapper: mapElement,
+    showData: showMapData,
+    fade: fadeMap,
     addFilterEvents: addFilterEvents
   };
 })();
