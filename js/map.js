@@ -141,7 +141,7 @@
 
   var applyFilters = function (objects) {
     return function () {
-      var filteredObjects = window.filter.filterObjects(objects);
+      var filteredObjects = window.filter.getFilteredObjects(objects);
       removeMapData();
       closePopupCard();
       showMapData(filteredObjects);

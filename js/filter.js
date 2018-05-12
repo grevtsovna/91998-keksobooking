@@ -90,7 +90,7 @@
   };
 
   window.filter = {
-    filterObjects: filterObjects,
+    getFilteredObjects: filterObjects,
     resetFilters: resetFilters,
     addEvents: addFilterEvents
   };
