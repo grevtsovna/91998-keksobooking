@@ -11,12 +11,12 @@
   var priceInput = mainForm.querySelector('#price');
   var addressInput = document.querySelector('#address');
   var mainFormInputs = mainForm.querySelectorAll('input, select');
-  var capacityEl = mainForm.querySelector('#capacity');
-  var roomNumberEl = mainForm.querySelector('#room_number');
-  var timeOutEl = mainForm.querySelector('#timeout');
-  var timeInEl = mainForm.querySelector('#timein');
+  var capacityElement = mainForm.querySelector('#capacity');
+  var roomNumberElement = mainForm.querySelector('#room_number');
+  var timeOutElement = mainForm.querySelector('#timeout');
+  var timeInElement = mainForm.querySelector('#timein');
   var imagesContainer = document.querySelector('.ad-form__photo-container');
-  var avatarEl = mainForm.querySelector('.ad-form-header__preview img');
+  var avatarElement = mainForm.querySelector('.ad-form-header__preview img');
   var imagesWrapper = mainForm.querySelector('.ad-form__photo-container');
   var draggedItem = null;
   var draggedFromElement = null;
@@ -54,13 +54,13 @@
   };
 
   var onTimeInputsChange = function (evt) {
-    var inputEl = (evt.currentTarget.id === 'timein') ? timeOutEl : timeInEl;
-    inputEl.value = evt.currentTarget.value;
+    var inputElement = (evt.currentTarget.id === 'timein') ? timeOutElement : timeInElement;
+    inputElement.value = evt.currentTarget.value;
   };
 
   var validateRoomNumber = function () {
-    var capacityValue = parseInt(capacityEl.value, 10);
-    var roomNumberValue = parseInt(roomNumberEl.value, 10);
+    var capacityValue = parseInt(capacityElement.value, 10);
+    var roomNumberValue = parseInt(roomNumberElement.value, 10);
     var validityMessage = '';
 
     if (capacityValue > roomNumberValue) {
@@ -69,7 +69,7 @@
     if (capacityValue === 0 && roomNumberValue !== PALACE_ROOM_NUMBER) {
       validityMessage = 'Этот вариант подходит только для тех помещений, в которых 100 комнат';
     }
-    capacityEl.setCustomValidity(validityMessage);
+    capacityElement.setCustomValidity(validityMessage);
   };
 
   var checkAllInputs = function () {
@@ -108,11 +108,11 @@
   };
 
   var onSuccessFormSubmit = function () {
-    var successEl = document.querySelector('.success');
-    successEl.classList.remove('hidden');
+    var successElement = document.querySelector('.success');
+    successElement.classList.remove('hidden');
     resetPage();
     setTimeout(function () {
-      successEl.classList.add('hidden');
+      successElement.classList.add('hidden');
     }, SUCCESS_MESSAGE_TIMEOUT);
   };
 
@@ -158,22 +158,22 @@
       var reader = new FileReader();
       reader.readAsDataURL(file);
       reader.addEventListener('load', function () {
-        avatarEl.src = reader.result;
+        avatarElement.src = reader.result;
       });
     }
   };
 
-  var createImageElement = function (imgData) {
+  var createImageElement = function (imageData) {
     var wrapper = document.createElement('div');
-    var img = document.createElement('img');
+    var image = document.createElement('img');
     wrapper.classList.add('ad-form__photo');
-    img.style.maxWidth = '100%';
-    img.style.cursor = 'move';
-    img.src = imgData;
-    img.addEventListener('dragstart', onImageDragstart);
+    image.style.maxWidth = '100%';
+    image.style.cursor = 'move';
+    image.src = imageData;
+    image.addEventListener('dragstart', onImageDragstart);
     wrapper.addEventListener('dragover', onImageDragover);
     wrapper.addEventListener('drop', onImageDrop);
-    wrapper.appendChild(img);
+    wrapper.appendChild(image);
 
     return wrapper;
   };
@@ -181,8 +181,8 @@
   var removeImages = function () {
     var images = imagesWrapper.querySelectorAll('.ad-form__photo');
 
-    Array.from(images).forEach(function (it) {
-      it.remove();
+    Array.from(images).forEach(function (image) {
+      image.remove();
     });
   };
 
@@ -190,28 +190,28 @@
     var files = evt.target.files;
     removeImages();
 
-    Array.from(files).forEach(function (it) {
-      if (window.util.checkImage(it)) {
+    Array.from(files).forEach(function (file) {
+      if (window.util.checkImage(file)) {
         var reader = new FileReader();
         reader.addEventListener('load', function () {
-          var img = createImageElement(reader.result);
-          imagesContainer.appendChild(img);
+          var image = createImageElement(reader.result);
+          imagesContainer.appendChild(image);
         });
-        reader.readAsDataURL(it);
+        reader.readAsDataURL(file);
       }
     });
   };
 
   var resetImages = function () {
+    var emptyImageWrapper = document.createElement('div');
     removeImages();
     imagesWrapper.querySelector('#images').value = '';
-    var emptyImgWrapper = document.createElement('div');
-    emptyImgWrapper.classList.add('ad-form__photo');
-    imagesContainer.appendChild(emptyImgWrapper);
+    emptyImageWrapper.classList.add('ad-form__photo');
+    imagesContainer.appendChild(emptyImageWrapper);
   };
 
   var resetAvatar = function () {
-    avatarEl.src = DEFAULT_AVATAR;
+    avatarElement.src = DEFAULT_AVATAR;
   };
 
   var onImageDragstart = function (evt) {
@@ -242,7 +242,7 @@
   mainForm.addEventListener('submit', onMainFormSubmit);
 
   window.form = {
-    activateForm: activateForm,
+    activate: activateForm,
     setAddress: setAddress
   };
 })();

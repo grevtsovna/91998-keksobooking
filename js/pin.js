@@ -33,7 +33,7 @@
       window.map.addFilterEvents(objects);
     };
     window.backend.loadData(onSuccessLoad, window.util.showErrors);
-    window.form.activateForm();
+    window.form.activate();
     evt.currentTarget.removeEventListener('mouseup', onDraggablePinMouseUp);
   };
 
